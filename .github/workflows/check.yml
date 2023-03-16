@@ -33,7 +33,7 @@ jobs:
       # freezedのためにbuild_runnerの実行
       - run: flutter pub run build_runner build
       # フォーマットの確認
-      - run: flutter format -n --set-exit-if-changed .
+      - run: dart format --set-exit-if-changed .
       # lintチェック
       - run: flutter analyze
       # 単体テストの実行とカバレッジレポートの出力
