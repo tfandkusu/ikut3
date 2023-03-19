@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ikut3/data/web_socket_provider.dart';
 
 class HomeStateNotifier extends StateNotifier<int> {
   HomeStateNotifier() : super(0);
@@ -19,6 +20,8 @@ class HomeScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(homeStateNotifierProvider);
     final stateNotifier = ref.read(homeStateNotifierProvider.notifier);
+    // ignore: unused_local_variable
+    final webSocket = ref.watch(webSocketProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("iKut 3"),
