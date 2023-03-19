@@ -12,9 +12,8 @@ class FooterWidget extends StatelessWidget {
     final themeData = Theme.of(context);
     final textStyle = themeData.typography.dense.bodySmall
         ?.copyWith(color: themeData.colorScheme.primary);
-    final warningTextStyle = themeData.typography.dense.bodySmall?.copyWith(
-      color: themeData.colorScheme.onSurfaceVariant
-    );
+    final warningTextStyle = themeData.typography.dense.bodySmall
+        ?.copyWith(color: themeData.colorScheme.onSurfaceVariant);
     return Column(children: [
       const Divider(),
       const SizedBox(height: 8),

@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/web_socket_provider.dart';
 
 import '../../../resource/strings.dart';
+import 'about_dialog.dart';
 import 'footer_widget.dart';
 
 class HomeStateNotifier extends StateNotifier<int> {
@@ -37,6 +38,14 @@ class HomeScreen extends HookConsumerWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(Strings.title),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.info_rounded),
+              onPressed: () {
+                showIkut3AboutDialog(context);
+              },
+            ),
+          ],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
