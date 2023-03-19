@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/web_socket_provider.dart';
+import 'package:ikut3/screen/home/stateholder/home_event_handler.dart';
 
 import '../../../resource/strings.dart';
 import 'about_dialog.dart';
 import 'footer_widget.dart';
-
-class HomeStateNotifier extends StateNotifier<int> {
-  HomeStateNotifier() : super(0);
-
-  void increase() {
-    state += 1;
-  }
-}
-
-final homeStateNotifierProvider =
-    StateNotifierProvider((ref) => HomeStateNotifier());
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final eventHandler = ref.read(homeEventHandlerProvider);
+    useEffect((){
+      eventHandler.onCreate();
+      return () {};
+    },[]);
     // 横幅を取得
     final width = MediaQuery.of(context).size.width;
     // ビデオ横幅を計算
