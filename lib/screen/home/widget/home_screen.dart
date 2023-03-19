@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/web_socket_provider.dart';
 
 import '../../../resource/strings.dart';
+import 'footer_widget.dart';
 
 class HomeStateNotifier extends StateNotifier<int> {
   HomeStateNotifier() : super(0);
@@ -37,18 +38,19 @@ class HomeScreen extends HookConsumerWidget {
         appBar: AppBar(
           title: Text(Strings.title),
         ),
-        body: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(height: 16),
-              SizedBox(
-                width: videoWidth,
-                height: videoHeight,
-                child: const HtmlElementView(viewType: "video"),
-              )
-            ],
-          ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            const SizedBox(height: 16),
+            Center(
+              child: SizedBox(
+                  width: videoWidth,
+                  height: videoHeight,
+                  child: const HtmlElementView(viewType: "video")),
+            ),
+            const SizedBox(height: 16),
+            const FooterWidget()
+          ],
         ) // This trailing comma makes auto-formatting nicer for build methods.
         );
   }
