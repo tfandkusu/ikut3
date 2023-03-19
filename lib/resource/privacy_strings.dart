@@ -1,7 +1,7 @@
 class PrivacyStrings {
   static String title = 'プライバシーポリシー';
 
-  static String body1 = 'WebアプリiKut 3のプライバシーポリシーを以下のように定めます。';
+  static String body1 = 'Webアプリ「iKut 3」のプライバシーポリシーを以下のように定めます。';
 
   static String head2 = '個人情報の定義';
 
