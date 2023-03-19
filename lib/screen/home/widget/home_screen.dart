@@ -45,9 +45,7 @@ class HomeScreen extends HookConsumerWidget {
               SizedBox(
                 width: videoWidth,
                 height: videoHeight,
-                child: Container(
-                  color: Colors.red,
-                ),
+                child: const HtmlElementView(viewType: "video"),
               )
             ],
           ),
