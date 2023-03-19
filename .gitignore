@@ -45,3 +45,4 @@ app.*.map.json
 
 *.freezed.dart
 lcov.info
+*.g.dart
