@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/web_socket_provider.dart';
 
+import '../../../resource/strings.dart';
+import 'about_dialog.dart';
+import 'footer_widget.dart';
+
 class HomeStateNotifier extends StateNotifier<int> {
   HomeStateNotifier() : super(0);
 
@@ -18,35 +22,45 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(homeStateNotifierProvider);
-    final stateNotifier = ref.read(homeStateNotifierProvider.notifier);
+    // 横幅を取得
+    final width = MediaQuery.of(context).size.width;
+    // ビデオ横幅を計算
+    double videoWidth = 600;
+    if (width < videoWidth) {
+      videoWidth = width;
+    }
+    // ビデオ縦幅を計算
+    double videoHeight = 9 * videoWidth / 16;
+    // final state = ref.watch(homeStateNotifierProvider);
+
     // ignore: unused_local_variable
     final webSocket = ref.watch(webSocketProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("iKut 3"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              state.toString(),
-              style: Theme.of(context).textTheme.headlineMedium,
+        appBar: AppBar(
+          title: Text(Strings.title),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.info_rounded),
+              onPressed: () {
+                showIkut3AboutDialog(context);
+              },
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          stateNotifier.increase();
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            const SizedBox(height: 16),
+            Center(
+              child: SizedBox(
+                  width: videoWidth,
+                  height: videoHeight,
+                  child: const HtmlElementView(viewType: "video")),
+            ),
+            const SizedBox(height: 16),
+            const FooterWidget()
+          ],
+        ) // This trailing comma makes auto-formatting nicer for build methods.
+        );
   }
 }
