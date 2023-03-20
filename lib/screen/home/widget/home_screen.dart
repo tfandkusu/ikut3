@@ -1,36 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/web_socket_provider.dart';
+import 'package:ikut3/screen/home/stateholder/home_event_handler.dart';
+import 'package:ikut3/screen/home/stateholder/home_ui_model_provider.dart';
+import 'package:ikut3/screen/home/widget/video_element.dart';
 
 import '../../../resource/strings.dart';
 import 'about_dialog.dart';
 import 'footer_widget.dart';
-
-class HomeStateNotifier extends StateNotifier<int> {
-  HomeStateNotifier() : super(0);
-
-  void increase() {
-    state += 1;
-  }
-}
-
-final homeStateNotifierProvider =
-    StateNotifierProvider((ref) => HomeStateNotifier());
+import 'home_log_widget.dart';
+import 'package:ikut3/util/shims/dart_ui.dart' as ui;
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final themeData = Theme.of(context);
+    final uiModel = ref.watch(homeUiModelProvider);
+    final eventHandler = ref.read(homeEventHandlerProvider);
+    // video要素を作成
+    ui.platformViewRegistry.registerViewFactory('video', (viewId) {
+      return getVideoElement(onCameraStart: () {
+        eventHandler.onCameraStart();
+      });
+    });
+    useEffect(() {
+      eventHandler.onCreate();
+      return () {};
+    }, []);
     // 横幅を取得
     final width = MediaQuery.of(context).size.width;
-    // ビデオ横幅を計算
-    double videoWidth = 600;
-    if (width < videoWidth) {
-      videoWidth = width;
+    // コンテンツ横幅を計算
+    double contentWidth = 600;
+    if (width < contentWidth) {
+      contentWidth = width;
     }
     // ビデオ縦幅を計算
-    double videoHeight = 9 * videoWidth / 16;
+    double videoHeight = 9 * contentWidth / 16;
     // final state = ref.watch(homeStateNotifierProvider);
 
     // ignore: unused_local_variable
@@ -50,13 +58,25 @@ class HomeScreen extends HookConsumerWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(height: 16),
             Center(
               child: SizedBox(
-                  width: videoWidth,
+                  width: contentWidth,
                   height: videoHeight,
                   child: const HtmlElementView(viewType: "video")),
             ),
+            const SizedBox(height: 16),
+            Expanded(
+                child: Container(
+              width: contentWidth,
+              decoration: BoxDecoration(
+                  border: Border.all(color: themeData.colorScheme.outline)),
+              child: ListView.builder(
+                  itemBuilder: (_, index) {
+                    final log = uiModel.logs[index];
+                    return HomeLogWidget(log);
+                  },
+                  itemCount: uiModel.logs.length),
+            )),
             const SizedBox(height: 16),
             const FooterWidget()
           ],

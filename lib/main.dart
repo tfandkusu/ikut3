@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/resource/color_schemas.dart';
 import 'package:ikut3/screen/home/widget/home_screen.dart';
-import 'package:ikut3/screen/home/widget/video_element.dart';
-import 'util/shims/dart_ui.dart' as ui;
 
 void main() {
   runApp(
@@ -19,10 +17,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // video要素を作成
-    ui.platformViewRegistry.registerViewFactory('video', (viewId) {
-      return getVideoElement();
-    });
     return MaterialApp(
       title: 'iKut 3',
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
