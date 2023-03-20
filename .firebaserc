@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "ikutapp"
+  },
+  "targets": {
+    "ikutapp": {
+      "hosting": {
+        "staging": [
+          "ikut3-staging"
+        ]
+      }
+    }
+  }
+}
