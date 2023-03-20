@@ -20,7 +20,7 @@ class HomeLogWidget extends StatelessWidget {
         cameraStart: (_) => LogStrings.cameraStart,
         saveReplayBuffer: (_) => LogStrings.saveReplayBuffer,
         replayBufferSaved: (_, uriString) =>
-            sprintf(LogStrings.replayBufferSaved, uriString));
+            sprintf(LogStrings.replayBufferSaved, [uriString]));
     final timeTextStyle = themeData.typography.dense.bodyMedium
         ?.copyWith(color: themeData.colorScheme.onSurfaceVariant);
     final eventTextStyle = themeData.typography.dense.bodyMedium

@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ikut3/data/websocket/obs_send_message_data.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../model/obs_message_data.dart';
-import '../model/obs_send_message.dart';
+import 'websocket/obs_send_message.dart';
 
 /// OBSを操作する担当Repository
 class ObsRepository {
@@ -20,7 +20,7 @@ class ObsRepository {
   void saveReplayBuffer() {
     final sendMessage = ObsSendMessage(
         op: 6,
-        d: ObsMessageData.request(
+        d: ObsSendMessageData.request(
             requestType: "SaveReplayBuffer", requestId: _uuid.v4()));
     final sendMessageString = json.encode(sendMessage.toJson());
     _webSocketChannel?.sink.add(sendMessageString);

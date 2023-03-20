@@ -16,6 +16,13 @@ class IkutLogListStateNotifier extends StateNotifier<List<IkutLog>> {
   void onSaveReplayBuffer(DateTime dateTime) {
     state = [...state, IkutLog.saveReplayBuffer(dateTime: dateTime)];
   }
+
+  void onReplayBufferSaved(DateTime dateTime, String path) {
+    state = [
+      ...state,
+      IkutLog.replayBufferSaved(dateTime: dateTime, uriString: "file://$path")
+    ];
+  }
 }
 
 final ikutLogListStateNotifierProvider =
