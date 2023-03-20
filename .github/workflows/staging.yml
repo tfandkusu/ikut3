@@ -1,0 +1,32 @@
+# ワークフローの名前
+name: staging
+# ワークフロー実行タイミングは
+on:
+  # stagingブランチへのPUSH
+  push:
+    branches:
+      - staging
+jobs:
+  staging: # job名
+    # ubuntuで動かす
+    runs-on: ubuntu-latest
+    steps:
+      # Firebase CLIをインストールする
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm install -g firebase-tools
+      # checkoutする
+      - uses: actions/checkout@v3
+      # Flutter環境のセットアップ
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.7.7'
+          channel: 'stable'
+          cache: true
+      # ビルドする
+      - run: flutter pub get
+      - run: flutter pub run build_runner build
+      - run: flutter build web
+      # デプロイする
+      - run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }} --only hosting:staging
