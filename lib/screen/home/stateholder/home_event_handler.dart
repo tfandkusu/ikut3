@@ -36,6 +36,7 @@ class HomeEventHandler {
         if (death) {
           // デスシーンの時はリプレイバッファを保存する。
           _obsRepository.saveReplayBuffer();
+          _stateNotifier.onSaveReplayBuffer(_currentTimeGetter.get());
           baseDelayTime = 8000;
         }
         final delay = max(baseDelayTime - (endTime - startTime), 0).toInt();

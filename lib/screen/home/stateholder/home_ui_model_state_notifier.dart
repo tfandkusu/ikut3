@@ -13,6 +13,13 @@ class HomeUiModelStateNotifier extends StateNotifier<HomeUiModel> {
     state = state.copyWith(
         logs: [...state.logs, HomeUiModelLog.cameraStart(dateTime: dateTime)]);
   }
+
+  void onSaveReplayBuffer(DateTime dateTime) {
+    state = state.copyWith(logs: [
+      ...state.logs,
+      HomeUiModelLog.saveReplayBuffer(dateTime: dateTime)
+    ]);
+  }
 }
 
 final homeUiModelStateNotifierProvider =
