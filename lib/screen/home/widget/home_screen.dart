@@ -3,10 +3,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/web_socket_provider.dart';
 import 'package:ikut3/screen/home/stateholder/home_event_handler.dart';
+import 'package:ikut3/screen/home/stateholder/home_ui_model_provider.dart';
 
 import '../../../resource/strings.dart';
 import 'about_dialog.dart';
 import 'footer_widget.dart';
+import 'home_log_widget.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
@@ -14,6 +16,7 @@ class HomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeData = Theme.of(context);
+    final uiModel = ref.watch(homeUiModelProvider);
     final eventHandler = ref.read(homeEventHandlerProvider);
     useEffect(() {
       eventHandler.onCreate();
@@ -59,6 +62,12 @@ class HomeScreen extends HookConsumerWidget {
               width: contentWidth,
               decoration: BoxDecoration(
                   border: Border.all(color: themeData.colorScheme.outline)),
+              child: ListView.builder(
+                  itemBuilder: (_, index) {
+                    final log = uiModel.logs[index];
+                    return HomeLogWidget(log);
+                  },
+                  itemCount: uiModel.logs.length),
             )),
             const SizedBox(height: 16),
             const FooterWidget()
