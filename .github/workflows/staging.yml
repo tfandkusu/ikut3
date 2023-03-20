@@ -6,12 +6,6 @@ on:
   push:
     branches:
       - staging
-  # プルリクの作成と更新
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
 jobs:
   staging: # job名
     # ubuntuで動かす
