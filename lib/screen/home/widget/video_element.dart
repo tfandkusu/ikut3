@@ -9,7 +9,7 @@ late VideoElement _ikutVideoElement;
 bool _ikutVideoElementCreated = false;
 
 /// 1つしかないvideo要素を取得する
-VideoElement getVideoElement() {
+VideoElement getVideoElement({Function? onCameraStart}) {
   if (!_ikutVideoElementCreated) {
     final videoElement = VideoElement();
     // ソースが設定されたら自動再生
@@ -18,6 +18,7 @@ VideoElement getVideoElement() {
     window.navigator.getUserMedia(video: true).then((stream) {
       // Webカメラへの接続が成功
       videoElement.srcObject = stream;
+      onCameraStart?.call();
     });
     videoElement.id = 'video';
     videoElement.controls = false;

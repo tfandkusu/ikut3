@@ -5,5 +5,5 @@ class LogStrings {
 
   static String saveReplayBuffer = "OBSにリプレイバッファ保存を要求しました。";
 
-  static String replayBufferIsSaved = "保存完了 %s";
+  static String replayBufferSaved = "保存完了 %s";
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model.dart';
 import 'package:intl/intl.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../../resource/log_strings.dart';
 
@@ -14,7 +15,12 @@ class HomeLogWidget extends StatelessWidget {
     final themeData = Theme.of(context);
     final format = DateFormat('MM/dd HH:mm:ss');
     final timeString = format.format(_log.dateTime);
-    final eventString = _log.when(appStart: (_) => LogStrings.appStart);
+    final eventString = _log.when(
+        appStart: (_) => LogStrings.appStart,
+        cameraStart: (_) => LogStrings.cameraStart,
+        saveReplayBuffer: (_) => LogStrings.saveReplayBuffer,
+        replayBufferSaved: (_, uriString) =>
+            sprintf(LogStrings.replayBufferSaved, uriString));
     final timeTextStyle = themeData.typography.dense.bodyMedium
         ?.copyWith(color: themeData.colorScheme.onSurfaceVariant);
     final eventTextStyle = themeData.typography.dense.bodyMedium

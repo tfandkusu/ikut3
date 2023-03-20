@@ -2,9 +2,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model.dart';
 
 class HomeUiModelStateNotifier extends StateNotifier<HomeUiModel> {
-  HomeUiModelStateNotifier()
-      : super(HomeUiModel(
-            logs: [HomeUiModelLog.appStart(dateTime: DateTime.now())]));
+  HomeUiModelStateNotifier() : super(const HomeUiModel(logs: []));
+
+  void onAppStart(DateTime dateTime) {
+    state = state.copyWith(
+        logs: [...state.logs, HomeUiModelLog.appStart(dateTime: dateTime)]);
+  }
+
+  void onCameraStart(DateTime dateTime) {
+    state = state.copyWith(
+        logs: [...state.logs, HomeUiModelLog.cameraStart(dateTime: dateTime)]);
+  }
 }
 
 final homeUiModelStateNotifierProvider =

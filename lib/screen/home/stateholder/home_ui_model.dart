@@ -13,4 +13,14 @@ class HomeUiModel with _$HomeUiModel {
 class HomeUiModelLog with _$HomeUiModelLog {
   const factory HomeUiModelLog.appStart({required DateTime dateTime}) =
       AppStart;
+
+  const factory HomeUiModelLog.cameraStart({required DateTime dateTime}) =
+      CameraStart;
+
+  const factory HomeUiModelLog.saveReplayBuffer({required DateTime dateTime}) =
+      SaveReplayBuffer;
+
+  const factory HomeUiModelLog.replayBufferSaved(
+      {required DateTime dateTime,
+      required String uriString}) = ReplayBufferSaved;
 }
