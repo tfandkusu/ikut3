@@ -5,6 +5,8 @@ import '../model/ikut_log.dart';
 class IkutLogListStateNotifier extends StateNotifier<List<IkutLog>> {
   IkutLogListStateNotifier() : super([]);
 
+  IkutLogListStateNotifier.override(List<IkutLog> logList) : super(logList);
+
   void onAppStart(DateTime dateTime) {
     state = [...state, IkutLog.appStart(dateTime: dateTime)];
   }
@@ -20,7 +22,7 @@ class IkutLogListStateNotifier extends StateNotifier<List<IkutLog>> {
   void onReplayBufferSaved(DateTime dateTime, String path) {
     state = [
       ...state,
-      IkutLog.replayBufferSaved(dateTime: dateTime, uriString: "file://$path")
+      IkutLog.replayBufferSaved(dateTime: dateTime, path: path)
     ];
   }
 }

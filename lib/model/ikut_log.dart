@@ -12,6 +12,5 @@ class IkutLog with _$IkutLog {
       SaveReplayBuffer;
 
   const factory IkutLog.replayBufferSaved(
-      {required DateTime dateTime,
-      required String uriString}) = ReplayBufferSaved;
+      {required DateTime dateTime, required String path}) = ReplayBufferSaved;
 }
