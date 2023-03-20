@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ikut3/data/obs_repository.dart';
 import 'package:ikut3/model/obs_message_data.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -15,6 +16,8 @@ final webSocketProvider = Provider.autoDispose((ref) {
   // TODO 接続エラー、途中切断
   final channel = WebSocketChannel.connect(wsUrl);
   ref.onDispose(() {
+    final obsRepository = ref.read(obsRepositoryProvider);
+    obsRepository.setWebSocketChannel(null);
     channel.sink.close();
   });
   channel.stream.listen((receiveMessageString) {
@@ -26,14 +29,8 @@ final webSocketProvider = Provider.autoDispose((ref) {
       final sendMessageString = json.encode(sendMessage.toJson());
       channel.sink.add(sendMessageString);
     } else if (receiveMessage.op == 2) {
-      // TODO リプレイバッファ保存が送れる
-      // final sendMessage = ObsSendMessage(
-      //     op: 6,
-      //     d: ObsMessageData.request(
-      //         requestType: "SaveReplayBuffer", requestId: uuid.v4()));
-      // final sendMessageString = json.encode(sendMessage.toJson());
-      // channel.sink.add(sendMessageString);
-      // print(sendMessageString);
+      final obsRepository = ref.read(obsRepositoryProvider);
+      obsRepository.setWebSocketChannel(channel);
     }
   });
 

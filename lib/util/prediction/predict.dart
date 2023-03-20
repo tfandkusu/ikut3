@@ -9,7 +9,6 @@ import 'package:ikut3/screen/home/widget/video_element.dart';
 import 'package:ikut3/util/prediction/predict_js.dart';
 
 class Predict {
-
   /// 分類対象画像の横幅
   static const _width = 398;
 
@@ -32,8 +31,7 @@ class Predict {
     final videoElement = getVideoElement();
     // フレームをcanvasに書き込む
     final context = _canvasElement.context2D;
-    context.drawImageScaled(
-        videoElement, 0, 0, _width, _height);
+    context.drawImageScaled(videoElement, 0, 0, _width, _height);
     // canvasをimgタグに書き出す
     final dataUrl = _canvasElement.toDataUrl();
     final imageElement = ImageElement();

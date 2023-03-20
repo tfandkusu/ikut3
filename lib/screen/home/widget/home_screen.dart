@@ -13,20 +13,21 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final themeData = Theme.of(context);
     final eventHandler = ref.read(homeEventHandlerProvider);
-    useEffect((){
+    useEffect(() {
       eventHandler.onCreate();
       return () {};
-    },[]);
+    }, []);
     // 横幅を取得
     final width = MediaQuery.of(context).size.width;
-    // ビデオ横幅を計算
-    double videoWidth = 600;
-    if (width < videoWidth) {
-      videoWidth = width;
+    // コンテンツ横幅を計算
+    double contentWidth = 600;
+    if (width < contentWidth) {
+      contentWidth = width;
     }
     // ビデオ縦幅を計算
-    double videoHeight = 9 * videoWidth / 16;
+    double videoHeight = 9 * contentWidth / 16;
     // final state = ref.watch(homeStateNotifierProvider);
 
     // ignore: unused_local_variable
@@ -46,13 +47,19 @@ class HomeScreen extends HookConsumerWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(height: 16),
             Center(
               child: SizedBox(
-                  width: videoWidth,
+                  width: contentWidth,
                   height: videoHeight,
                   child: const HtmlElementView(viewType: "video")),
             ),
+            const SizedBox(height: 16),
+            Expanded(
+                child: Container(
+              width: contentWidth,
+              decoration: BoxDecoration(
+                  border: Border.all(color: themeData.colorScheme.outline)),
+            )),
             const SizedBox(height: 16),
             const FooterWidget()
           ],

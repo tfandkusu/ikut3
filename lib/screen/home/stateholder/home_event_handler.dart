@@ -1,16 +1,18 @@
 import 'dart:math';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ikut3/data/obs_repository.dart';
 
 import '../../../util/prediction/predict.dart';
 
 class HomeEventHandler {
-
   final Predict _predict;
 
-  Function _predictTask = (){};
+  final ObsRepository _obsRepository;
 
-  HomeEventHandler(this._predict);
+  Function _predictTask = () {};
+
+  HomeEventHandler(this._predict, this._obsRepository);
 
   Future<void> onCreate() async {
     await _predict.load();
@@ -21,11 +23,13 @@ class HomeEventHandler {
         // デスシーンでないときは0.5秒後にシーン分類する
         int baseDelayTime = 500;
         // デスシーンの時は8秒後にシーン分類を再開する。
-        if(death) {
+        if (death) {
+          // デスシーンの時はリプレイバッファを保存する。
+          _obsRepository.saveReplayBuffer();
           baseDelayTime = 8000;
         }
         final delay = max(baseDelayTime - (endTime - startTime), 0).toInt();
-        Future.delayed(Duration(milliseconds: delay), (){
+        Future.delayed(Duration(milliseconds: delay), () {
           _predictTask();
         });
       });
@@ -34,6 +38,7 @@ class HomeEventHandler {
   }
 }
 
-final homeEventHandlerProvider = Provider((ref){
-  return HomeEventHandler(ref.read(predictProvider));
+final homeEventHandlerProvider = Provider((ref) {
+  return HomeEventHandler(
+      ref.read(predictProvider), ref.read(obsRepositoryProvider));
 });
