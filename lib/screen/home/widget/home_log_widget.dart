@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ikut3/screen/home/stateholder/home_ui_model.dart';
 import 'package:intl/intl.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../../../model/ikut_log.dart';
 import '../../../resource/log_strings.dart';
 
 class HomeLogWidget extends StatelessWidget {
-  final HomeUiModelLog _log;
+  final IkutLog _log;
 
   const HomeLogWidget(this._log, {super.key});
 

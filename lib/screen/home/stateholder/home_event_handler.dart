@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
 import 'package:ikut3/data/obs_repository.dart';
-import 'package:ikut3/screen/home/stateholder/home_ui_model_state_notifier.dart';
 import 'package:ikut3/util/current_time_provider.dart';
 
 import '../../../util/prediction/predict.dart';
@@ -13,7 +13,7 @@ class HomeEventHandler {
 
   final ObsRepository _obsRepository;
 
-  final HomeUiModelStateNotifier _stateNotifier;
+  final IkutLogListStateNotifier _stateNotifier;
 
   final CurrentTimeGetter _currentTimeGetter;
 
@@ -57,6 +57,6 @@ final homeEventHandlerProvider = Provider((ref) {
   return HomeEventHandler(
       ref.read(predictProvider),
       ref.read(obsRepositoryProvider),
-      ref.read(homeUiModelStateNotifierProvider.notifier),
+      ref.read(ikutLogListStateNotifierProvider.notifier),
       ref.read(currentTimeGetterProvider));
 });
