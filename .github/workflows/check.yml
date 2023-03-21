@@ -42,6 +42,6 @@ jobs:
         env:
           TZ: Asia/Tokyo
       # カバレッジレポートをCodecovに送る
-#      - run: curl -Os https://uploader.codecov.io/latest/linux/codecov
-#      - run: chmod +x codecov
-#      - run: ./codecov -t ${{ secrets.CODECOV_TOKEN }}
+      - run: curl -Os https://uploader.codecov.io/latest/linux/codecov
+      - run: chmod +x codecov
+      - run: ./codecov -t ${{ secrets.CODECOV_TOKEN }}
