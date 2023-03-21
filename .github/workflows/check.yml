@@ -43,3 +43,5 @@ jobs:
           TZ: Asia/Tokyo
       # カバレッジレポートをCodecovに送る
       - uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
