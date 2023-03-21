@@ -16,6 +16,7 @@ jobs:
   check: # job名
     # ubuntuで動かす
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       # ソースコードのチェックアウト
       - uses: actions/checkout@v3
