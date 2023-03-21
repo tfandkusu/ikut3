@@ -1,16 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
-import 'package:ikut3/data/obs_repository.dart';
 import 'package:ikut3/screen/home/stateholder/home_event_handler.dart';
+import 'package:ikut3/screen/home/usecase/home_on_create_use_case.dart';
 import 'package:ikut3/util/current_time_provider.dart';
-import 'package:ikut3/util/prediction/predict.dart';
-import 'package:ikut3/util/prediction/predict_provider.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockPredict extends Mock implements Predict {}
-
-class MockObsRepository extends Mock implements ObsRepository {}
+class MockHomeOnCreateUseCase extends Mock implements HomeOnCreateUseCase {}
 
 class MockIkutLogListStateNotifier extends Mock
     implements IkutLogListStateNotifier {}
@@ -18,15 +14,20 @@ class MockIkutLogListStateNotifier extends Mock
 class MockCurrentTimeGetter extends Mock implements CurrentTimeGetter {}
 
 void main() {
-  final predict = MockPredict();
-  final obsRepository = MockObsRepository();
+  final onCreateUseCase = MockHomeOnCreateUseCase();
   final stateNotifier = MockIkutLogListStateNotifier();
   final currentTimeGetter = MockCurrentTimeGetter();
+  test('HomeEventHandler#onCreate', () async {
+    when(() => onCreateUseCase.execute()).thenAnswer((_) async {});
+    final container = ProviderContainer(
+        overrides: [homeOnCreateUseCase.overrideWithValue(onCreateUseCase)]);
+    final eventHandler = container.read(homeEventHandlerProvider);
+    await eventHandler.onCreate();
+    verifyInOrder([() => onCreateUseCase.execute()]);
+  });
   test('HomeEventHandler#onCameraStart', () {
     final now = DateTime.now();
     final container = ProviderContainer(overrides: [
-      predictProvider.overrideWithValue(predict),
-      obsRepositoryProvider.overrideWithValue(obsRepository),
       ikutLogListStateNotifierProvider.overrideWith((ref) => stateNotifier),
       currentTimeGetterProvider.overrideWithValue(currentTimeGetter)
     ]);
