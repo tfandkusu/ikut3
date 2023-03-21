@@ -26,7 +26,7 @@ class HomeEventHandler {
     _ikutLogStateNotifier.onCameraStart(_currentTimeGetter.get());
   }
 
-  void connectCamera() {
+  void onClickConnectCamera() {
     _stateNotifier.onConnectCamera();
   }
 }

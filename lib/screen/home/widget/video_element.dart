@@ -30,3 +30,11 @@ VideoElement getVideoElement({Function? onCameraStart}) {
   }
   return _ikutVideoElement;
 }
+
+VideoElement? getVideoElementIfCreated() {
+  if (_ikutVideoElementCreated) {
+    return _ikutVideoElement;
+  } else {
+    return null;
+  }
+}

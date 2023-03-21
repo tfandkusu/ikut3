@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../resource/strings.dart';
+import '../stateholder/home_event_handler.dart';
 import '../stateholder/home_ui_model_provider.dart';
 
 class HomeVideoWidget extends HookConsumerWidget {
@@ -13,7 +14,7 @@ class HomeVideoWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeData = Theme.of(context);
     final uiModel = ref.watch(homeUiModelProvider);
-    // final eventHandler = ref.read(homeEventHandlerProvider);
+    final eventHandler = ref.read(homeEventHandlerProvider);
     final messageTextStyle = themeData.typography.dense.bodyLarge
         ?.copyWith(color: themeData.colorScheme.onSecondaryContainer);
     final buttonTextStyle = themeData.typography.dense.titleMedium
@@ -43,7 +44,9 @@ class HomeVideoWidget extends HookConsumerWidget {
                   Text(Strings.connectCameraMessage, style: messageTextStyle),
                   const SizedBox(height: 32),
                   FilledButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        eventHandler.onClickConnectCamera();
+                      },
                       icon: const Icon(Icons.videocam_rounded),
                       label: Text(Strings.connectCameraButton,
                           style: buttonTextStyle),
