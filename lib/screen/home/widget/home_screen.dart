@@ -39,8 +39,15 @@ class HomeScreen extends HookConsumerWidget {
     }
     // ビデオ縦幅を計算
     double videoHeight = 9 * contentWidth / 16;
-    // final state = ref.watch(homeStateNotifierProvider);
-
+    // スクロール制御
+    // ログが追加されたら最下部にスクロールする。
+    final scrollController = useScrollController();
+    ref.listen(homeUiModelProvider, (previous, next) {
+      if ((previous?.logs.length ?? 0) < next.logs.length) {
+        scrollController.animateTo(scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300), curve: Curves.ease);
+      }
+    });
     // ignore: unused_local_variable
     final webSocket = ref.watch(webSocketProvider);
     return Scaffold(
@@ -75,7 +82,8 @@ class HomeScreen extends HookConsumerWidget {
                     final log = uiModel.logs[index];
                     return HomeLogWidget(log);
                   },
-                  itemCount: uiModel.logs.length),
+                  itemCount: uiModel.logs.length,
+                  controller: scrollController),
             )),
             const SizedBox(height: 16),
             const FooterWidget()
