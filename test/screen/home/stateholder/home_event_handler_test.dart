@@ -22,7 +22,7 @@ void main() {
   final obsRepository = MockObsRepository();
   final stateNotifier = MockIkutLogListStateNotifier();
   final currentTimeGetter = MockCurrentTimeGetter();
-  test('test onCameraStart', () {
+  test('HomeEventHandler#onCameraStart', () {
     final now = DateTime.now();
     final container = ProviderContainer(overrides: [
       predictProvider.overrideWithValue(predict),

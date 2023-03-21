@@ -6,7 +6,7 @@ import 'package:ikut3/screen/home/stateholder/home_ui_model.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model_provider.dart';
 
 void main() {
-  test('test homeUiModelProvider', () {
+  test('homeUiModelProvider', () {
     final dateTime = DateTime.now();
     final logs = [
       IkutLog.appStart(dateTime: dateTime.copyWith(second: 0)),
