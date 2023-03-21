@@ -10,6 +10,7 @@ jobs:
   staging: # job名
     # ubuntuで動かす
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       # Firebase CLIをインストールする
       - uses: actions/setup-node@v2
