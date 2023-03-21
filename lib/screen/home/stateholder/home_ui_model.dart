@@ -8,5 +8,7 @@ part 'home_ui_model.freezed.dart';
 @freezed
 class HomeUiModel with _$HomeUiModel {
   /// [logs] ログ一覧
-  const factory HomeUiModel({required List<IkutLog> logs}) = _HomeUiModel;
+  /// [isShowVideo] video要素を表示する
+  const factory HomeUiModel(
+      {required List<IkutLog> logs, required bool isShowVideo}) = _HomeUiModel;
 }

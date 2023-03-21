@@ -5,7 +5,7 @@ class Strings {
 
   static String nintendoWarning2 = '任天堂株式会社とは一切関係はございません。';
 
-  static String connectCameraMessage = "OBSのバーチャルカメラに接続してください。";
+  static String connectCameraMessage = "OBSの仮想カメラに接続してください。";
 
-  static String connectCameraButton = "接続";
+  static String connectCameraButton = "カメラに接続";
 }

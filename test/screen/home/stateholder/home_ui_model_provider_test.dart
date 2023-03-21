@@ -19,6 +19,6 @@ void main() {
           .overrideWith((ref) => IkutLogListStateNotifier.override(logs))
     ]);
     getUiModel() => container.read(homeUiModelProvider);
-    expect(getUiModel(), HomeUiModel(logs: logs));
+    expect(getUiModel(), HomeUiModel(logs: logs, isShowVideo: false));
   });
 }

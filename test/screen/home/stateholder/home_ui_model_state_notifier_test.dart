@@ -6,8 +6,11 @@ import 'package:ikut3/screen/home/stateholder/home_ui_model_state_notifier.dart'
 void main() {
   test("HomeUiModelStateNotifier", () {
     final container = ProviderContainer();
-    // final stateNotifier = container.read(homeUiModelStateNotifierProvider.notifier);
+    final stateNotifier =
+        container.read(homeUiModelStateNotifierProvider.notifier);
     getState() => container.read(homeUiModelStateNotifierProvider);
-    expect(getState(), const HomeUiModel(logs: []));
+    expect(getState(), const HomeUiModel(logs: [], isShowVideo: false));
+    stateNotifier.onConnectCamera();
+    expect(getState(), const HomeUiModel(logs: [], isShowVideo: true));
   });
 }
