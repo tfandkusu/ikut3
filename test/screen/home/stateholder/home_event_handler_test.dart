@@ -14,14 +14,14 @@ class MockIkutLogListStateNotifier extends Mock
 
 class MockCurrentTimeGetter extends Mock implements CurrentTimeGetter {}
 
-class MockHomeUiModelStateNotifier extends Mock implements HomeUiModelStateNotifier {}
+class MockHomeUiModelStateNotifier extends Mock
+    implements HomeUiModelStateNotifier {}
 
 void main() {
   final onCreateUseCase = MockHomeOnCreateUseCase();
   final stateNotifier = MockIkutLogListStateNotifier();
   final currentTimeGetter = MockCurrentTimeGetter();
-  final homeUiModelStateNotifier =
-      MockHomeUiModelStateNotifier();
+  final homeUiModelStateNotifier = MockHomeUiModelStateNotifier();
   test('HomeEventHandler#onCreate', () async {
     when(() => onCreateUseCase.execute()).thenAnswer((_) async {});
     final container = ProviderContainer(
@@ -47,13 +47,12 @@ void main() {
   test('HomeEventHandler#onClickConnectCamera', () {
     final now = DateTime.now();
     final container = ProviderContainer(overrides: [
-      homeUiModelStateNotifierProvider.overrideWith((ref) => homeUiModelStateNotifier),
+      homeUiModelStateNotifierProvider
+          .overrideWith((ref) => homeUiModelStateNotifier),
     ]);
     when(() => currentTimeGetter.get()).thenReturn(now);
     final eventHandler = container.read(homeEventHandlerProvider);
     eventHandler.onClickConnectCamera();
-    verifyInOrder([
-      () => homeUiModelStateNotifier.onConnectCamera()
-    ]);
+    verifyInOrder([() => homeUiModelStateNotifier.onConnectCamera()]);
   });
 }

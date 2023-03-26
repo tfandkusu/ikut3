@@ -2,6 +2,8 @@
 
 import 'dart:html';
 
+import '../../../util/media/media_js.dart';
+
 /// １つしか無いvideo要素
 late VideoElement _ikutVideoElement;
 
@@ -19,6 +21,21 @@ VideoElement getVideoElement({Function? onCameraStart}) {
       // Webカメラへの接続が成功
       videoElement.srcObject = stream;
       onCameraStart?.call();
+      // TODO
+      // できればラベルにOBSが付いているデバイスを選択したいが
+      // 接続してからで無いと取得できない。
+      // https://developer.mozilla.org/ja/docs/Web/API/MediaDeviceInfo
+      window.navigator.mediaDevices?.enumerateDevices().then((devices) {
+        for (var mediaDeviceInfo in devices) {
+          // ignore: unused_local_variable
+          final deviceId = getMediaDeviceInfoDeviceId(mediaDeviceInfo);
+          // ignore: unused_local_variable
+          final kind = getMediaDeviceInfoKind(mediaDeviceInfo);
+          // ignore: unused_local_variable
+          final label = getMediaDeviceInfoLabel(mediaDeviceInfo);
+          // print("deviceId = $deviceId kind = $kind label = $label");
+        }
+      });
     });
     videoElement.id = 'video';
     videoElement.controls = false;
