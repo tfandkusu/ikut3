@@ -9,10 +9,10 @@ void main() {
     final container = ProviderContainer();
 
     final localDataSource = container.read(localDataSourceProvider);
-    expect(await localDataSource.isCameraHasConnected(), false);
-    await localDataSource.setCameraHasConnected(true);
-    expect(await localDataSource.isCameraHasConnected(), true);
-    await localDataSource.setCameraHasConnected(false);
-    expect(await localDataSource.isCameraHasConnected(), false);
+    expect(await localDataSource.isCameraHasStarted(), false);
+    await localDataSource.setCameraHasStarted(true);
+    expect(await localDataSource.isCameraHasStarted(), true);
+    await localDataSource.setCameraHasStarted(false);
+    expect(await localDataSource.isCameraHasStarted(), false);
   });
 }
