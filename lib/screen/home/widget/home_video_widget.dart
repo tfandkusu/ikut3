@@ -55,7 +55,11 @@ class HomeVideoWidget extends HookConsumerWidget {
             width: _width,
             height: videoHeight,
             child: Stack(children: [
-              const HtmlElementView(viewType: "video"),
+              Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          color: themeData.colorScheme.surfaceVariant)),
+                  child: const HtmlElementView(viewType: "video")),
               Visibility(
                   visible: uiModel.videoStatus == HomeVideoStatus.connecting,
                   child: Container(
