@@ -3,6 +3,7 @@ import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model_state_notifier.dart';
 import 'package:ikut3/util/current_time_provider.dart';
 
+import '../../../data/local_data_source.dart';
 import '../usecase/home_on_create_use_case.dart';
 
 class HomeEventHandler {
@@ -14,15 +15,20 @@ class HomeEventHandler {
 
   final HomeUiModelStateNotifier _stateNotifier;
 
+  final LocalDataSource _localDataSource;
+
   HomeEventHandler(this._onCreateUseCase, this._ikutLogStateNotifier,
-      this._currentTimeGetter, this._stateNotifier);
+      this._currentTimeGetter, this._stateNotifier, this._localDataSource);
 
   Future<void> onCreate() async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    if (await _localDataSource.isCameraHasStarted()) {
+      onClickConnectCamera();
+    }
     await _onCreateUseCase.execute();
   }
 
-  void onCameraStart() {
+  Future<void> onCameraStart() async {
+    _localDataSource.setCameraHasStarted(true);
     _stateNotifier.onCameraStart();
     _ikutLogStateNotifier.onCameraStart(_currentTimeGetter.get());
   }
@@ -37,5 +43,6 @@ final homeEventHandlerProvider = Provider((ref) {
       ref.read(homeOnCreateUseCase),
       ref.read(ikutLogListStateNotifierProvider.notifier),
       ref.read(currentTimeGetterProvider),
-      ref.read(homeUiModelStateNotifierProvider.notifier));
+      ref.read(homeUiModelStateNotifierProvider.notifier),
+      ref.read(localDataSourceProvider));
 });
