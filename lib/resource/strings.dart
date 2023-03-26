@@ -8,4 +8,6 @@ class Strings {
   static String connectCameraMessage = "OBSの仮想カメラに接続してください。";
 
   static String connectCameraButton = "カメラに接続";
+
+  static String connectingCameraMessage = "カメラに接続中です";
 }

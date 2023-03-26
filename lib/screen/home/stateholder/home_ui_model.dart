@@ -4,11 +4,22 @@ import '../../../model/ikut_log.dart';
 
 part 'home_ui_model.freezed.dart';
 
+/// 動画の状態
+enum HomeVideoStatus {
+  /// 初期状態
+  initial,
+  // 接続中
+  connecting,
+  // 開始済み
+  start
+}
+
 /// ホーム画面の状態
 @freezed
 class HomeUiModel with _$HomeUiModel {
   /// [logs] ログ一覧
   /// [isShowVideo] video要素を表示する
   const factory HomeUiModel(
-      {required List<IkutLog> logs, required bool isShowVideo}) = _HomeUiModel;
+      {required List<IkutLog> logs,
+      required HomeVideoStatus videoStatus}) = _HomeUiModel;
 }

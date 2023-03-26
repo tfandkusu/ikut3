@@ -3,10 +3,15 @@ import 'package:ikut3/screen/home/stateholder/home_ui_model.dart';
 
 class HomeUiModelStateNotifier extends StateNotifier<HomeUiModel> {
   HomeUiModelStateNotifier()
-      : super(const HomeUiModel(logs: [], isShowVideo: false));
+      : super(
+            const HomeUiModel(logs: [], videoStatus: HomeVideoStatus.initial));
 
-  void onConnectCamera() {
-    state = state.copyWith(isShowVideo: true);
+  void onConnectingCamera() {
+    state = state.copyWith(videoStatus: HomeVideoStatus.connecting);
+  }
+
+  void onCameraStart() {
+    state = state.copyWith(videoStatus: HomeVideoStatus.start);
   }
 }
 

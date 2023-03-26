@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ikut3/screen/home/stateholder/home_ui_model.dart';
 
 import '../../../resource/strings.dart';
 import '../stateholder/home_event_handler.dart';
@@ -24,14 +25,7 @@ class HomeVideoWidget extends HookConsumerWidget {
             (states) => const EdgeInsets.all(24)));
     // ビデオ縦幅を計算
     double videoHeight = 9 * _width / 16;
-    if (uiModel.isShowVideo) {
-      return Center(
-        child: SizedBox(
-            width: _width,
-            height: videoHeight,
-            child: const HtmlElementView(viewType: "video")),
-      );
-    } else {
+    if (uiModel.videoStatus == HomeVideoStatus.initial) {
       return Center(
         child: SizedBox(
             width: _width,
@@ -54,6 +48,30 @@ class HomeVideoWidget extends HookConsumerWidget {
                 ],
               ),
             )),
+      );
+    } else {
+      return Center(
+        child: SizedBox(
+            width: _width,
+            height: videoHeight,
+            child: Stack(children: [
+              const HtmlElementView(viewType: "video"),
+              Visibility(
+                  visible: uiModel.videoStatus == HomeVideoStatus.connecting,
+                  child: Container(
+                      color: themeData.colorScheme.secondaryContainer,
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 32),
+                          Text(Strings.connectingCameraMessage,
+                              style: messageTextStyle),
+                          const SizedBox(height: 32),
+                          const CircularProgressIndicator()
+                        ],
+                      )))
+            ])),
       );
     }
   }

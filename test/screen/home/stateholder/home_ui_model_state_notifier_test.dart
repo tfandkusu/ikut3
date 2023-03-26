@@ -9,8 +9,13 @@ void main() {
     final stateNotifier =
         container.read(homeUiModelStateNotifierProvider.notifier);
     getState() => container.read(homeUiModelStateNotifierProvider);
-    expect(getState(), const HomeUiModel(logs: [], isShowVideo: false));
-    stateNotifier.onConnectCamera();
-    expect(getState(), const HomeUiModel(logs: [], isShowVideo: true));
+    expect(getState(),
+        const HomeUiModel(logs: [], videoStatus: HomeVideoStatus.initial));
+    stateNotifier.onConnectingCamera();
+    expect(getState(),
+        const HomeUiModel(logs: [], videoStatus: HomeVideoStatus.connecting));
+    stateNotifier.onCameraStart();
+    expect(getState(),
+        const HomeUiModel(logs: [], videoStatus: HomeVideoStatus.start));
   });
 }

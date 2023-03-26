@@ -34,12 +34,15 @@ void main() {
     final now = DateTime.now();
     final container = ProviderContainer(overrides: [
       ikutLogListStateNotifierProvider.overrideWith((ref) => stateNotifier),
-      currentTimeGetterProvider.overrideWithValue(currentTimeGetter)
+      currentTimeGetterProvider.overrideWithValue(currentTimeGetter),
+      homeUiModelStateNotifierProvider
+          .overrideWith((ref) => homeUiModelStateNotifier)
     ]);
     when(() => currentTimeGetter.get()).thenReturn(now);
     final eventHandler = container.read(homeEventHandlerProvider);
     eventHandler.onCameraStart();
     verifyInOrder([
+      () => homeUiModelStateNotifier.onCameraStart(),
       () => currentTimeGetter.get(),
       () => stateNotifier.onCameraStart(now)
     ]);
@@ -53,6 +56,6 @@ void main() {
     when(() => currentTimeGetter.get()).thenReturn(now);
     final eventHandler = container.read(homeEventHandlerProvider);
     eventHandler.onClickConnectCamera();
-    verifyInOrder([() => homeUiModelStateNotifier.onConnectCamera()]);
+    verifyInOrder([() => homeUiModelStateNotifier.onConnectingCamera()]);
   });
 }
