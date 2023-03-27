@@ -22,15 +22,16 @@ class FooterWidget extends StatelessWidget {
             showPrivacyDialog(context);
           },
           child: Text(PrivacyStrings.title, style: textStyle)),
-      const SizedBox(height: 8),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(Strings.nintendoWarning1, style: warningTextStyle),
-          Text(Strings.nintendoWarning2, style: warningTextStyle)
-        ],
+      Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(Strings.nintendoWarning1, style: warningTextStyle),
+            Text(Strings.nintendoWarning2, style: warningTextStyle)
+          ],
+        ),
       ),
-      const SizedBox(height: 16)
     ]);
   }
 }

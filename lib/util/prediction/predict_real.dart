@@ -30,22 +30,28 @@ class PredictImpl extends Predict {
   /// 現在の取り込みフレームを画像分類する。
   @override
   void predict(void Function(int count, bool death) onResult) {
-    final videoElement = getVideoElement();
-    // フレームをcanvasに書き込む
-    final context = _canvasElement.context2D;
-    context.drawImageScaled(videoElement, 0, 0, _width, _height);
-    // canvasをimgタグに書き出す
-    final dataUrl = _canvasElement.toDataUrl();
-    final imageElement = ImageElement();
-    imageElement.addEventListener("load", (event) async {
-      // imgタグでの読込が完了したら予測する
-      String jsonString = await promiseToFuture(classify(imageElement));
-      // フレームの予測が完了
-      final label = _getLabel(jsonString);
-      onResult(_count, label == "death");
+    final videoElement = getVideoElementIfCreated();
+    if (videoElement != null) {
+      // フレームをcanvasに書き込む
+      final context = _canvasElement.context2D;
+      context.drawImageScaled(videoElement, 0, 0, _width, _height);
+      // canvasをimgタグに書き出す
+      final dataUrl = _canvasElement.toDataUrl();
+      final imageElement = ImageElement();
+      imageElement.addEventListener("load", (event) async {
+        // imgタグでの読込が完了したら予測する
+        String jsonString = await promiseToFuture(classify(imageElement));
+        // フレームの予測が完了
+        final label = _getLabel(jsonString);
+        onResult(_count, label == "death");
+        ++_count;
+      });
+      imageElement.src = dataUrl;
+    } else {
+      // ビデオが設定されていない時は通常シーン扱い。
+      onResult(_count, false);
       ++_count;
-    });
-    imageElement.src = dataUrl;
+    }
   }
 
   /// 結果JSONからラベル名を取得する

@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/web_socket_provider.dart';
 import 'package:ikut3/screen/home/stateholder/home_event_handler.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model_provider.dart';
+import 'package:ikut3/screen/home/widget/home_video_widget.dart';
 import 'package:ikut3/screen/home/widget/video_element.dart';
 
 import '../../../resource/strings.dart';
@@ -37,8 +38,6 @@ class HomeScreen extends HookConsumerWidget {
     if (width < contentWidth) {
       contentWidth = width;
     }
-    // ビデオ縦幅を計算
-    double videoHeight = 9 * contentWidth / 16;
     // スクロール制御
     // ログが追加されたら最下部にスクロールする。
     final scrollController = useScrollController();
@@ -65,13 +64,10 @@ class HomeScreen extends HookConsumerWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Center(
-              child: SizedBox(
-                  width: contentWidth,
-                  height: videoHeight,
-                  child: const HtmlElementView(viewType: "video")),
-            ),
+            // ビデオ表示部分
+            HomeVideoWidget(contentWidth),
             const SizedBox(height: 16),
+            // ログ表示部分
             Expanded(
                 child: Container(
               width: contentWidth,
@@ -86,6 +82,7 @@ class HomeScreen extends HookConsumerWidget {
                   controller: scrollController),
             )),
             const SizedBox(height: 16),
+            // フッター部分
             const FooterWidget()
           ],
         ) // This trailing comma makes auto-formatting nicer for build methods.
