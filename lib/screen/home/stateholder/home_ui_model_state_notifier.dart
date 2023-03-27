@@ -6,10 +6,12 @@ class HomeUiModelStateNotifier extends StateNotifier<HomeUiModel> {
       : super(
             const HomeUiModel(logs: [], videoStatus: HomeVideoStatus.initial));
 
+  /// video要素を張った
   void onConnectingCamera() {
     state = state.copyWith(videoStatus: HomeVideoStatus.connecting);
   }
 
+  /// カメラの取り込みが開始された
   void onCameraStart() {
     state = state.copyWith(videoStatus: HomeVideoStatus.start);
   }

@@ -64,8 +64,10 @@ class HomeScreen extends HookConsumerWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            // ビデオ表示部分
             HomeVideoWidget(contentWidth),
             const SizedBox(height: 16),
+            // ログ表示部分
             Expanded(
                 child: Container(
               width: contentWidth,
@@ -80,6 +82,7 @@ class HomeScreen extends HookConsumerWidget {
                   controller: scrollController),
             )),
             const SizedBox(height: 16),
+            // フッター部分
             const FooterWidget()
           ],
         ) // This trailing comma makes auto-formatting nicer for build methods.
