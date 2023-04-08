@@ -8,6 +8,10 @@ class LocalDataSource {
 
   static const _keyWebSocketPort = "webSocketPort";
 
+  static const defaultHost = "localhost";
+
+  static const defaultPort = 4545;
+
   Future<void> setCameraHasStarted(bool cameraHasConnected) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyCameraHasStarted, cameraHasConnected);

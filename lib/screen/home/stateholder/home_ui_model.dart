@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:ikut3/model/web_socket_connection.dart';
 
 import '../../../model/ikut_log.dart';
 
@@ -23,5 +24,6 @@ class HomeUiModel with _$HomeUiModel {
   /// [videoStatus] ビデオ部分になにを表示するか
   const factory HomeUiModel(
       {required List<IkutLog> logs,
-      required HomeVideoStatus videoStatus}) = _HomeUiModel;
+      required HomeVideoStatus videoStatus,
+      required WebSocketConnection connection}) = _HomeUiModel;
 }
