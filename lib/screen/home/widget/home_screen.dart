@@ -10,6 +10,7 @@ import 'package:ikut3/screen/home/widget/video_element.dart';
 import '../../../resource/strings.dart';
 import 'about_dialog.dart';
 import 'footer_widget.dart';
+import 'home_connection_widget.dart';
 import 'home_log_widget.dart';
 import 'package:ikut3/util/shims/dart_ui.dart' as ui;
 
@@ -66,6 +67,9 @@ class HomeScreen extends HookConsumerWidget {
           children: <Widget>[
             // ビデオ表示部分
             HomeVideoWidget(contentWidth),
+            const SizedBox(height: 16),
+            // WebSocket接続部分
+            HomeConnectionWidget(contentWidth),
             const SizedBox(height: 16),
             // ログ表示部分
             Expanded(
