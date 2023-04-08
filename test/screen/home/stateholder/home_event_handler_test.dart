@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
 import 'package:ikut3/data/local_data_source.dart';
+import 'package:ikut3/data/web_socket_connection_state_notifier.dart';
+import 'package:ikut3/model/web_socket_connection_status.dart';
 import 'package:ikut3/screen/home/stateholder/home_event_handler.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model_state_notifier.dart';
 import 'package:ikut3/screen/home/usecase/home_on_create_use_case.dart';
@@ -20,12 +22,16 @@ class MockHomeUiModelStateNotifier extends Mock
 
 class MockLocalDataSource extends Mock implements LocalDataSource {}
 
+class MockWebSocketConnectionStateNotifier extends Mock
+    implements WebSocketConnectionStateNotifier {}
+
 void main() {
   final onCreateUseCase = MockHomeOnCreateUseCase();
   final stateNotifier = MockIkutLogListStateNotifier();
   final currentTimeGetter = MockCurrentTimeGetter();
   final homeUiModelStateNotifier = MockHomeUiModelStateNotifier();
   final localDataSource = MockLocalDataSource();
+  final webSocketConnectionStateNotifier = WebSocketConnectionStateNotifier();
   test('HomeEventHandler#onCreate カメラの許可をまだ出していない。', () async {
     when(() => localDataSource.isCameraHasStarted()).thenAnswer((_) async {
       return false;
@@ -92,5 +98,20 @@ void main() {
     final eventHandler = container.read(homeEventHandlerProvider);
     eventHandler.onClickConnectCamera();
     verifyInOrder([() => homeUiModelStateNotifier.onConnectingCamera()]);
+  });
+
+  test('HomeEventHandler#onClickConnect', () {
+    final now = DateTime.now();
+    final container = ProviderContainer(overrides: [
+      webSocketConnectionStateNotifierProvider
+          .overrideWith((ref) => webSocketConnectionStateNotifier),
+    ]);
+    when(() => currentTimeGetter.get()).thenReturn(now);
+    final eventHandler = container.read(homeEventHandlerProvider);
+    eventHandler.onClickConnect();
+    verifyInOrder([
+      () => webSocketConnectionStateNotifier
+          .setStatus(WebSocketConnectionStatus.progress)
+    ]);
   });
 }
