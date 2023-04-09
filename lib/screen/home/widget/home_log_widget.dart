@@ -30,6 +30,8 @@ class HomeLogWidget extends StatelessWidget {
         fontFeatures: [const FontFeature.tabularFigures()]);
     final eventTextStyle = themeData.typography.dense.bodyMedium
         ?.copyWith(color: themeData.colorScheme.onSurface);
+    final errorTextStyle = themeData.typography.dense.bodyMedium
+        ?.copyWith(color: themeData.colorScheme.secondary);
     final pathTextStyle = themeData.typography.englishLike.bodySmall
         ?.copyWith(color: themeData.colorScheme.onSurfaceVariant);
     final rowChildren = <Widget>[];
@@ -49,6 +51,15 @@ class HomeLogWidget extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: pathTextStyle)));
+    }, connectError: (dateTime) {
+      rowChildren.add(Expanded(
+        child: Text(
+          eventString,
+          style: errorTextStyle,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+      ));
     }, orElse: () {
       // それ以外ケース
       rowChildren.add(Expanded(

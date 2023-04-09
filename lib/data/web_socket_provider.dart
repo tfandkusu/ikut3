@@ -6,7 +6,7 @@ import 'package:ikut3/data/obs_repository.dart';
 import 'package:ikut3/data/web_socket_connection_state_notifier.dart';
 import 'package:ikut3/data/websocket/obs_receive_message.dart';
 import 'package:ikut3/data/websocket/obs_send_message_data.dart';
-import 'package:ikut3/screen/home/stateholder/home_ui_model_state_notifier.dart';
+import 'package:ikut3/screen/home/stateholder/home_event_handler.dart';
 import 'package:ikut3/util/current_time_provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -14,8 +14,7 @@ import 'websocket/obs_send_message.dart';
 
 final webSocketProvider = Provider.autoDispose((ref) {
   final logStateNotifier = ref.read(ikutLogListStateNotifierProvider.notifier);
-  final homeUiModelStateNotifier =
-      ref.read(homeUiModelStateNotifierProvider.notifier);
+  final homeEventHandler = ref.read(homeEventHandlerProvider);
   final currentTimeGetter = ref.read(currentTimeGetterProvider);
   final connection = ref.watch(webSocketConnectionStateNotifierProvider);
   if (!connection.connect) {
@@ -41,7 +40,7 @@ final webSocketProvider = Provider.autoDispose((ref) {
       channel.sink.add(sendMessageString);
     } else if (receiveMessage.op == 2) {
       logStateNotifier.onConnected(currentTimeGetter.get());
-      homeUiModelStateNotifier.onConnected();
+      homeEventHandler.onConnected();
       final obsRepository = ref.read(obsRepositoryProvider);
       obsRepository.setWebSocketChannel(channel);
     } else if (receiveMessage.op == 5) {
@@ -53,6 +52,8 @@ final webSocketProvider = Provider.autoDispose((ref) {
         }
       }
     }
+  }, onError: (error) {
+    homeEventHandler.onConnectError();
   });
   return 0;
 });

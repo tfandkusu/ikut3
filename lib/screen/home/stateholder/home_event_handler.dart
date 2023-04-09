@@ -10,7 +10,7 @@ import '../usecase/home_on_create_use_case.dart';
 class HomeEventHandler {
   final HomeOnCreateUseCase _onCreateUseCase;
 
-  final IkutLogListStateNotifier _logStateNotifier;
+  final IkutLogListStateNotifier _logListStateNotifier;
 
   final CurrentTimeGetter _currentTimeGetter;
 
@@ -22,7 +22,7 @@ class HomeEventHandler {
 
   HomeEventHandler(
       this._onCreateUseCase,
-      this._logStateNotifier,
+      this._logListStateNotifier,
       this._currentTimeGetter,
       this._stateNotifier,
       this._localDataSource,
@@ -38,7 +38,7 @@ class HomeEventHandler {
   Future<void> onCameraStart() async {
     _localDataSource.setCameraHasStarted(true);
     _stateNotifier.onCameraStart();
-    _logStateNotifier.onCameraStart(_currentTimeGetter.get());
+    _logListStateNotifier.onCameraStart(_currentTimeGetter.get());
   }
 
   void onClickConnectCamera() {
@@ -47,8 +47,25 @@ class HomeEventHandler {
 
   /// 接続ボタンが押された
   void onClickConnect() {
-    _logStateNotifier.onStartConnect(_currentTimeGetter.get());
+    _logListStateNotifier.onStartConnect(_currentTimeGetter.get());
     _connectionStateNotifier.setConnect(true);
+  }
+
+  /// 接続された
+  void onConnected() {
+    _stateNotifier.onConnected();
+  }
+
+  /// 接続エラー
+  void onConnectError() {
+    _logListStateNotifier.onConnectError(_currentTimeGetter.get());
+    _stateNotifier.onConnectError();
+  }
+
+  /// 接続エラーが確認された
+  void onConnectErrorConfirmed() {
+    _connectionStateNotifier.setConnect(false);
+    _stateNotifier.resetConnectStatus();
   }
 }
 

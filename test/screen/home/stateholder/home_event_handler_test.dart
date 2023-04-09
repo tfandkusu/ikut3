@@ -117,4 +117,48 @@ void main() {
       () => webSocketConnectionStateNotifier.setConnect(true)
     ]);
   });
+
+  test('HomeEventHandler#onConnected', () {
+    final container = ProviderContainer(overrides: [
+      homeUiModelStateNotifierProvider
+          .overrideWith((ref) => homeUiModelStateNotifier)
+    ]);
+    final eventHandler = container.read(homeEventHandlerProvider);
+    eventHandler.onConnected();
+    verifyInOrder([() => homeUiModelStateNotifier.onConnected()]);
+  });
+
+  test('HomeEventHandler#onConnectError', () {
+    final container = ProviderContainer(overrides: [
+      currentTimeGetterProvider.overrideWithValue(currentTimeGetter),
+      ikutLogListStateNotifierProvider
+          .overrideWith((ref) => logListStateNotifier),
+      homeUiModelStateNotifierProvider
+          .overrideWith((ref) => homeUiModelStateNotifier)
+    ]);
+    final now = DateTime.now();
+    when(() => currentTimeGetter.get()).thenReturn(now);
+    final eventHandler = container.read(homeEventHandlerProvider);
+    eventHandler.onConnectError();
+    verifyInOrder([
+      () => currentTimeGetter.get(),
+      () => logListStateNotifier.onConnectError(now),
+      () => homeUiModelStateNotifier.onConnectError()
+    ]);
+  });
+
+  test('HomeEventHandler#resetConnectStatus', () {
+    final container = ProviderContainer(overrides: [
+      webSocketConnectionStateNotifierProvider
+          .overrideWith((ref) => webSocketConnectionStateNotifier),
+      homeUiModelStateNotifierProvider
+          .overrideWith((ref) => homeUiModelStateNotifier)
+    ]);
+    final eventHandler = container.read(homeEventHandlerProvider);
+    eventHandler.onConnectErrorConfirmed();
+    verifyInOrder([
+      () => webSocketConnectionStateNotifier.setConnect(false),
+      () => homeUiModelStateNotifier.resetConnectStatus()
+    ]);
+  });
 }
