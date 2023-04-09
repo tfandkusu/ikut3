@@ -1,6 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
-import 'package:ikut3/model/web_socket_connection_status.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model_state_notifier.dart';
 import 'package:ikut3/util/current_time_provider.dart';
 
@@ -11,7 +10,7 @@ import '../usecase/home_on_create_use_case.dart';
 class HomeEventHandler {
   final HomeOnCreateUseCase _onCreateUseCase;
 
-  final IkutLogListStateNotifier _ikutLogStateNotifier;
+  final IkutLogListStateNotifier _logStateNotifier;
 
   final CurrentTimeGetter _currentTimeGetter;
 
@@ -23,7 +22,7 @@ class HomeEventHandler {
 
   HomeEventHandler(
       this._onCreateUseCase,
-      this._ikutLogStateNotifier,
+      this._logStateNotifier,
       this._currentTimeGetter,
       this._stateNotifier,
       this._localDataSource,
@@ -39,7 +38,7 @@ class HomeEventHandler {
   Future<void> onCameraStart() async {
     _localDataSource.setCameraHasStarted(true);
     _stateNotifier.onCameraStart();
-    _ikutLogStateNotifier.onCameraStart(_currentTimeGetter.get());
+    _logStateNotifier.onCameraStart(_currentTimeGetter.get());
   }
 
   void onClickConnectCamera() {
@@ -48,7 +47,8 @@ class HomeEventHandler {
 
   /// 接続ボタンが押された
   void onClickConnect() {
-    _connectionStateNotifier.setStatus(WebSocketConnectionStatus.progress);
+    _logStateNotifier.onStartConnect(_currentTimeGetter.get());
+    _connectionStateNotifier.setConnect(true);
   }
 }
 

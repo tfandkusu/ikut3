@@ -1,6 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/model/web_socket_connection.dart';
-import 'package:ikut3/model/web_socket_connection_status.dart';
 
 import 'local_data_source.dart';
 
@@ -8,10 +7,9 @@ class WebSocketConnectionStateNotifier
     extends StateNotifier<WebSocketConnection> {
   WebSocketConnectionStateNotifier()
       : super(const WebSocketConnection(
-          host: LocalDataSource.defaultHost,
-          port: LocalDataSource.defaultPort,
-          status: WebSocketConnectionStatus.disconnect,
-        ));
+            host: LocalDataSource.defaultHost,
+            port: LocalDataSource.defaultPort,
+            connect: false));
 
   WebSocketConnectionStateNotifier.override(WebSocketConnection connection)
       : super(connection);
@@ -20,8 +18,8 @@ class WebSocketConnectionStateNotifier
     state = state.copyWith(host: host, port: port);
   }
 
-  void setStatus(WebSocketConnectionStatus status) {
-    state = state.copyWith(status: status);
+  void setConnect(bool connect) {
+    state = state.copyWith(connect: connect);
   }
 }
 

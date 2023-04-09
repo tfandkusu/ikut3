@@ -15,6 +15,18 @@ class IkutLogListStateNotifier extends StateNotifier<List<IkutLog>> {
     state = [...state, IkutLog.cameraStart(dateTime: dateTime)];
   }
 
+  void onStartConnect(DateTime dateTime) {
+    state = [...state, IkutLog.connecting(dateTime: dateTime)];
+  }
+
+  void onConnectError(DateTime dateTime) {
+    state = [...state, IkutLog.connectError(dateTime: dateTime)];
+  }
+
+  void onConnected(DateTime dateTime) {
+    state = [...state, IkutLog.connected(dateTime: dateTime)];
+  }
+
   void onSaveReplayBuffer(DateTime dateTime) {
     state = [...state, IkutLog.saveReplayBuffer(dateTime: dateTime)];
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ikut3/screen/home/stateholder/home_ui_model.dart';
 
 import '../../../resource/strings.dart';
+import '../stateholder/home_event_handler.dart';
 import '../stateholder/home_ui_model_provider.dart';
 
 class HomeConnectionWidget extends HookConsumerWidget {
@@ -13,11 +15,22 @@ class HomeConnectionWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeData = Theme.of(context);
     final uiModel = ref.watch(homeUiModelProvider);
-    // final eventHandler = ref.read(homeEventHandlerProvider);
+    final eventHandler = ref.read(homeEventHandlerProvider);
     final keyStyle = themeData.typography.dense.bodyMedium?.copyWith(
         color: themeData.colorScheme.onSurface, fontWeight: FontWeight.bold);
     final valueStyle = themeData.typography.englishLike.bodyMedium
         ?.copyWith(color: themeData.colorScheme.onSurfaceVariant);
+    String buttonText = Strings.connect;
+    if (uiModel.connection.connect) {
+      if (uiModel.connectStatus == HomeConnectStatus.progress) {
+        buttonText = Strings.connecting;
+      } else if (uiModel.connectStatus == HomeConnectStatus.success) {
+        buttonText = Strings.connected;
+      }
+    }
+    final buttonStyle = ButtonStyle(
+        padding: MaterialStateProperty.resolveWith(
+            (states) => const EdgeInsets.fromLTRB(32, 16, 32, 16)));
     return Center(
       child: SizedBox(
         width: _contentWidth + 36,
@@ -40,7 +53,15 @@ class HomeConnectionWidget extends HookConsumerWidget {
               Text(Strings.port, style: keyStyle),
               const SizedBox(width: 8),
               Text(uiModel.connection.port.toString(), style: valueStyle),
-              const SizedBox(width: 16)
+              const SizedBox(width: 32),
+              FilledButton(
+                  style: buttonStyle,
+                  onPressed: uiModel.connection.connect
+                      ? null
+                      : () {
+                          eventHandler.onClickConnect();
+                        },
+                  child: Text(buttonText))
             ]),
       ),
     );

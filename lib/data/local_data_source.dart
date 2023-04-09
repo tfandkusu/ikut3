@@ -10,7 +10,7 @@ class LocalDataSource {
 
   static const defaultHost = "localhost";
 
-  static const defaultPort = 4545;
+  static const defaultPort = 4455;
 
   Future<void> setCameraHasStarted(bool cameraHasConnected) async {
     final prefs = await SharedPreferences.getInstance();
@@ -29,7 +29,7 @@ class LocalDataSource {
 
   Future<String> getWebSocketHost() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyWebSocketHost) ?? "localhost";
+    return prefs.getString(_keyWebSocketHost) ?? defaultHost;
   }
 
   Future<void> setWebSocketPort(int webSocketPort) async {
@@ -39,7 +39,7 @@ class LocalDataSource {
 
   Future<int> getWebSocketPort() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_keyWebSocketPort) ?? 4455;
+    return prefs.getInt(_keyWebSocketPort) ?? defaultPort;
   }
 }
 

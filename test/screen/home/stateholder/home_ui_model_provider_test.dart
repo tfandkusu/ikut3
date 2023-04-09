@@ -5,7 +5,6 @@ import 'package:ikut3/data/local_data_source.dart';
 import 'package:ikut3/data/web_socket_connection_state_notifier.dart';
 import 'package:ikut3/model/ikut_log.dart';
 import 'package:ikut3/model/web_socket_connection.dart';
-import 'package:ikut3/model/web_socket_connection_status.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model_provider.dart';
 
@@ -20,7 +19,7 @@ void main() {
     const connection = WebSocketConnection(
         host: LocalDataSource.defaultHost,
         port: LocalDataSource.defaultPort,
-        status: WebSocketConnectionStatus.disconnect);
+        connect: false);
 
     final container = ProviderContainer(overrides: [
       ikutLogListStateNotifierProvider
@@ -34,6 +33,7 @@ void main() {
         HomeUiModel(
             logs: logs,
             videoStatus: HomeVideoStatus.initial,
-            connection: connection));
+            connection: connection,
+            connectStatus: HomeConnectStatus.progress));
   });
 }

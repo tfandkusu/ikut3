@@ -3,7 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
 import 'package:ikut3/data/local_data_source.dart';
 import 'package:ikut3/data/web_socket_connection_state_notifier.dart';
-import 'package:ikut3/model/web_socket_connection_status.dart';
 import 'package:ikut3/screen/home/stateholder/home_event_handler.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model_state_notifier.dart';
 import 'package:ikut3/screen/home/usecase/home_on_create_use_case.dart';
@@ -27,7 +26,7 @@ class MockWebSocketConnectionStateNotifier extends Mock
 
 void main() {
   final onCreateUseCase = MockHomeOnCreateUseCase();
-  final stateNotifier = MockIkutLogListStateNotifier();
+  final logListStateNotifier = MockIkutLogListStateNotifier();
   final currentTimeGetter = MockCurrentTimeGetter();
   final homeUiModelStateNotifier = MockHomeUiModelStateNotifier();
   final localDataSource = MockLocalDataSource();
@@ -72,7 +71,8 @@ void main() {
     when(() => localDataSource.setCameraHasStarted(true))
         .thenAnswer((_) async {});
     final container = ProviderContainer(overrides: [
-      ikutLogListStateNotifierProvider.overrideWith((ref) => stateNotifier),
+      ikutLogListStateNotifierProvider
+          .overrideWith((ref) => logListStateNotifier),
       currentTimeGetterProvider.overrideWithValue(currentTimeGetter),
       homeUiModelStateNotifierProvider
           .overrideWith((ref) => homeUiModelStateNotifier),
@@ -85,7 +85,7 @@ void main() {
       () => localDataSource.setCameraHasStarted(true),
       () => homeUiModelStateNotifier.onCameraStart(),
       () => currentTimeGetter.get(),
-      () => stateNotifier.onCameraStart(now)
+      () => logListStateNotifier.onCameraStart(now)
     ]);
   });
   test('HomeEventHandler#onClickConnectCamera', () {
@@ -103,6 +103,9 @@ void main() {
   test('HomeEventHandler#onClickConnect', () {
     final now = DateTime.now();
     final container = ProviderContainer(overrides: [
+      currentTimeGetterProvider.overrideWithValue(currentTimeGetter),
+      ikutLogListStateNotifierProvider
+          .overrideWith((ref) => logListStateNotifier),
       webSocketConnectionStateNotifierProvider
           .overrideWith((ref) => webSocketConnectionStateNotifier),
     ]);
@@ -110,8 +113,8 @@ void main() {
     final eventHandler = container.read(homeEventHandlerProvider);
     eventHandler.onClickConnect();
     verifyInOrder([
-      () => webSocketConnectionStateNotifier
-          .setStatus(WebSocketConnectionStatus.progress)
+      () => logListStateNotifier.onStartConnect(now),
+      () => webSocketConnectionStateNotifier.setConnect(true)
     ]);
   });
 }

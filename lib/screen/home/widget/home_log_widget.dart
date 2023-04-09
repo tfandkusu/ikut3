@@ -17,10 +17,14 @@ class HomeLogWidget extends StatelessWidget {
     final format = DateFormat('MM/dd HH:mm:ss');
     final timeString = format.format(_log.dateTime);
     final eventString = _log.when(
-        appStart: (_) => LogStrings.appStart,
-        cameraStart: (_) => LogStrings.cameraStart,
-        saveReplayBuffer: (_) => LogStrings.saveReplayBuffer,
-        replayBufferSaved: (_, uriString) => LogStrings.replayBufferSaved);
+      appStart: (_) => LogStrings.appStart,
+      cameraStart: (_) => LogStrings.cameraStart,
+      saveReplayBuffer: (_) => LogStrings.saveReplayBuffer,
+      replayBufferSaved: (_, uriString) => LogStrings.replayBufferSaved,
+      connecting: (_) => LogStrings.connecting,
+      connected: (_) => LogStrings.connected,
+      connectError: (_) => LogStrings.connectError,
+    );
     final timeTextStyle = themeData.typography.dense.bodyMedium?.copyWith(
         color: themeData.colorScheme.onSurfaceVariant,
         fontFeatures: [const FontFeature.tabularFigures()]);

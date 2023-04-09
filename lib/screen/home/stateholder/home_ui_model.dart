@@ -17,6 +17,18 @@ enum HomeVideoStatus {
   start
 }
 
+/// WebSocket接続の状態
+enum HomeConnectStatus {
+  /// 未接続または接続中
+  progress,
+
+  /// 接続完了
+  success,
+
+  /// エラー
+  error
+}
+
 /// ホーム画面の状態
 @freezed
 class HomeUiModel with _$HomeUiModel {
@@ -25,5 +37,6 @@ class HomeUiModel with _$HomeUiModel {
   const factory HomeUiModel(
       {required List<IkutLog> logs,
       required HomeVideoStatus videoStatus,
-      required WebSocketConnection connection}) = _HomeUiModel;
+      required WebSocketConnection connection,
+      required HomeConnectStatus connectStatus}) = _HomeUiModel;
 }
