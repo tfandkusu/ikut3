@@ -34,6 +34,8 @@ enum HomeConnectStatus {
 class HomeUiModel with _$HomeUiModel {
   /// [logs] ログ一覧
   /// [videoStatus] ビデオ部分になにを表示するか
+  /// [connection] obs-websocket 接続情報
+  /// [connectStatus] obs-websocket 接続状態
   const factory HomeUiModel(
       {required List<IkutLog> logs,
       required HomeVideoStatus videoStatus,

@@ -7,6 +7,7 @@ import '../../../resource/strings.dart';
 import '../stateholder/home_event_handler.dart';
 import '../stateholder/home_ui_model_provider.dart';
 
+/// ホーム画面の接続情報部分
 class HomeConnectionWidget extends HookConsumerWidget {
   final double _contentWidth;
 
@@ -21,7 +22,7 @@ class HomeConnectionWidget extends HookConsumerWidget {
         color: themeData.colorScheme.onSurface, fontWeight: FontWeight.bold);
     final valueStyle = themeData.typography.englishLike.bodyMedium
         ?.copyWith(color: themeData.colorScheme.onSurfaceVariant);
-    // 接続エラー表示
+    // 接続エラーダイアログ表示
     ref.listen(homeUiModelProvider, (previous, next) {
       checkOneShotOperation(previous, next,
           (uiModel) => uiModel.connectStatus == HomeConnectStatus.error,
@@ -80,7 +81,7 @@ class HomeConnectionWidget extends HookConsumerWidget {
     );
   }
 
-  /// 接続エラーを表示する。
+  /// 接続エラーダイアログを表示する。
   void _showConnectError(BuildContext context) {
     final themeData = Theme.of(context);
     final titleTextStyle = themeData.typography.dense.headlineMedium
