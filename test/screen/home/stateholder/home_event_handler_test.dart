@@ -66,7 +66,7 @@ void main() {
       () => onCreateUseCase.execute()
     ]);
   });
-  test('HomeEventHandler#onCameraStart', () {
+  test('HomeEventHandler#onCameraStart', () async {
     final now = DateTime.now();
     when(() => localDataSource.setCameraHasStarted(true))
         .thenAnswer((_) async {});
@@ -80,15 +80,15 @@ void main() {
     ]);
     when(() => currentTimeGetter.get()).thenReturn(now);
     final eventHandler = container.read(homeEventHandlerProvider);
-    eventHandler.onCameraStart();
+    await eventHandler.onCameraStart();
     verifyInOrder([
-      () => localDataSource.setCameraHasStarted(true),
       () => homeUiModelStateNotifier.onCameraStart(),
       () => currentTimeGetter.get(),
-      () => logListStateNotifier.onCameraStart(now)
+      () => logListStateNotifier.onCameraStart(now),
+      () => localDataSource.setCameraHasStarted(true),
     ]);
   });
-  test('HomeEventHandler#onClickConnectCamera', () {
+  test('HomeEventHandler#onClickConnectCamera', () async {
     final now = DateTime.now();
     final container = ProviderContainer(overrides: [
       homeUiModelStateNotifierProvider
@@ -118,32 +118,40 @@ void main() {
     ]);
   });
 
-  test('HomeEventHandler#onConnected', () {
+  test('HomeEventHandler#onConnected', () async {
+    when(() => localDataSource.setConnected(true)).thenAnswer((_) async {});
     final container = ProviderContainer(overrides: [
       homeUiModelStateNotifierProvider
-          .overrideWith((ref) => homeUiModelStateNotifier)
+          .overrideWith((ref) => homeUiModelStateNotifier),
+      localDataSourceProvider.overrideWithValue(localDataSource)
     ]);
     final eventHandler = container.read(homeEventHandlerProvider);
-    eventHandler.onConnected();
-    verifyInOrder([() => homeUiModelStateNotifier.onConnected()]);
+    await eventHandler.onConnected();
+    verifyInOrder([
+      () => homeUiModelStateNotifier.onConnected(),
+      () => localDataSource.setConnected(true)
+    ]);
   });
 
-  test('HomeEventHandler#onConnectError', () {
+  test('HomeEventHandler#onConnectError', () async {
+    when(() => localDataSource.setConnected(false)).thenAnswer((_) async {});
     final container = ProviderContainer(overrides: [
       currentTimeGetterProvider.overrideWithValue(currentTimeGetter),
       ikutLogListStateNotifierProvider
           .overrideWith((ref) => logListStateNotifier),
       homeUiModelStateNotifierProvider
-          .overrideWith((ref) => homeUiModelStateNotifier)
+          .overrideWith((ref) => homeUiModelStateNotifier),
+      localDataSourceProvider.overrideWithValue(localDataSource)
     ]);
     final now = DateTime.now();
     when(() => currentTimeGetter.get()).thenReturn(now);
     final eventHandler = container.read(homeEventHandlerProvider);
-    eventHandler.onConnectError();
+    await eventHandler.onConnectError();
     verifyInOrder([
       () => currentTimeGetter.get(),
       () => logListStateNotifier.onConnectError(now),
-      () => homeUiModelStateNotifier.onConnectError()
+      () => homeUiModelStateNotifier.onConnectError(),
+      () => localDataSource.setConnected(false)
     ]);
   });
 

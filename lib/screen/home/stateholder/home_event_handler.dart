@@ -36,9 +36,9 @@ class HomeEventHandler {
   }
 
   Future<void> onCameraStart() async {
-    _localDataSource.setCameraHasStarted(true);
     _stateNotifier.onCameraStart();
     _logListStateNotifier.onCameraStart(_currentTimeGetter.get());
+    await _localDataSource.setCameraHasStarted(true);
   }
 
   void onClickConnectCamera() {
@@ -52,14 +52,16 @@ class HomeEventHandler {
   }
 
   /// 接続された
-  void onConnected() {
+  Future<void> onConnected() async {
     _stateNotifier.onConnected();
+    await _localDataSource.setConnected(true);
   }
 
   /// 接続エラー
-  void onConnectError() {
+  Future<void> onConnectError() async {
     _logListStateNotifier.onConnectError(_currentTimeGetter.get());
     _stateNotifier.onConnectError();
+    await _localDataSource.setConnected(false);
   }
 
   /// 接続エラーが確認された
