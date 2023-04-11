@@ -2,11 +2,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalDataSource {
+  /// 1度カメラが開始したので、次回は自動で開始する
   static const _keyCameraHasStarted = "cameraHasStarted";
 
   static const _keyWebSocketHost = "webSocketHost";
 
   static const _keyWebSocketPort = "webSocketPort";
+
+  /// 1度接続成功したので、次回は自動接続する
+  static const _keyConnected = "connected";
 
   static const defaultHost = "localhost";
 
@@ -40,6 +44,16 @@ class LocalDataSource {
   Future<int> getWebSocketPort() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt(_keyWebSocketPort) ?? defaultPort;
+  }
+
+  Future<void> setConnected(bool connected) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyConnected, connected);
+  }
+
+  Future<bool> isConnected() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keyConnected) ?? false;
   }
 }
 

@@ -13,6 +13,7 @@ void main() {
     expect(await localDataSource.isCameraHasStarted(), false);
     expect(await localDataSource.getWebSocketHost(), "localhost");
     expect(await localDataSource.getWebSocketPort(), 4455);
+    expect(await localDataSource.isConnected(), false);
     // 保存の確認
     await localDataSource.setCameraHasStarted(true);
     expect(await localDataSource.isCameraHasStarted(), true);
@@ -22,5 +23,9 @@ void main() {
     expect(await localDataSource.getWebSocketHost(), "example.com");
     await localDataSource.setWebSocketPort(4455);
     expect(await localDataSource.getWebSocketPort(), 4455);
+    await localDataSource.setConnected(true);
+    expect(await localDataSource.isConnected(), true);
+    await localDataSource.setConnected(false);
+    expect(await localDataSource.isConnected(), false);
   });
 }
