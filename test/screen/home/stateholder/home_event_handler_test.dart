@@ -31,38 +31,64 @@ void main() {
   final homeUiModelStateNotifier = MockHomeUiModelStateNotifier();
   final localDataSource = MockLocalDataSource();
   final webSocketConnectionStateNotifier = WebSocketConnectionStateNotifier();
-  test('HomeEventHandler#onCreate カメラの許可をまだ出していない。', () async {
+  test('HomeEventHandler#onCreate カメラの許可をまだ出していない。obs-websocketに自動接続しない。',
+      () async {
+    final now = DateTime.now();
+    when(() => currentTimeGetter.get()).thenReturn(now);
     when(() => localDataSource.isCameraHasStarted()).thenAnswer((_) async {
+      return false;
+    });
+    when(() => localDataSource.isConnected()).thenAnswer((_) async {
       return false;
     });
     when(() => onCreateUseCase.execute()).thenAnswer((_) async {});
     final container = ProviderContainer(overrides: [
+      currentTimeGetterProvider.overrideWithValue(currentTimeGetter),
+      ikutLogListStateNotifierProvider
+          .overrideWith((ref) => logListStateNotifier),
       homeOnCreateUseCase.overrideWithValue(onCreateUseCase),
       localDataSourceProvider.overrideWithValue(localDataSource)
     ]);
     final eventHandler = container.read(homeEventHandlerProvider);
     await eventHandler.onCreate();
     verifyInOrder([
+      () => logListStateNotifier.onAppStart(now),
       () => localDataSource.isCameraHasStarted(),
+      () => localDataSource.isConnected(),
       () => onCreateUseCase.execute()
     ]);
   });
-  test('HomeEventHandler#onCreate カメラの許可を以前の起動時に行っている', () async {
+  test('HomeEventHandler#onCreate カメラの許可を以前の起動時に行っている。obs-websocketに自動接続する。',
+      () async {
+    final now = DateTime.now();
     when(() => localDataSource.isCameraHasStarted()).thenAnswer((_) async {
       return true;
     });
+    when(() => localDataSource.isConnected()).thenAnswer((_) async {
+      return true;
+    });
     when(() => onCreateUseCase.execute()).thenAnswer((_) async {});
+    when(() => currentTimeGetter.get()).thenReturn(now);
     final container = ProviderContainer(overrides: [
       homeOnCreateUseCase.overrideWithValue(onCreateUseCase),
       homeUiModelStateNotifierProvider
           .overrideWith((ref) => homeUiModelStateNotifier),
-      localDataSourceProvider.overrideWithValue(localDataSource)
+      localDataSourceProvider.overrideWithValue(localDataSource),
+      ikutLogListStateNotifierProvider
+          .overrideWith((ref) => logListStateNotifier),
+      webSocketConnectionStateNotifierProvider
+          .overrideWith((ref) => webSocketConnectionStateNotifier),
+      currentTimeGetterProvider.overrideWithValue(currentTimeGetter)
     ]);
     final eventHandler = container.read(homeEventHandlerProvider);
     await eventHandler.onCreate();
     verifyInOrder([
+      () => logListStateNotifier.onAppStart(now),
       () => localDataSource.isCameraHasStarted(),
       () => homeUiModelStateNotifier.onConnectingCamera(),
+      () => localDataSource.isConnected(),
+      () => logListStateNotifier.onStartConnect(now),
+      () => webSocketConnectionStateNotifier.setConnect(true),
       () => onCreateUseCase.execute()
     ]);
   });

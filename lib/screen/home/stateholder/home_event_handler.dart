@@ -29,8 +29,15 @@ class HomeEventHandler {
       this._connectionStateNotifier);
 
   Future<void> onCreate() async {
+    // ログ「起動しました」を追加。
+    _logListStateNotifier.onAppStart(_currentTimeGetter.get());
+    // カメラ自動接続
     if (await _localDataSource.isCameraHasStarted()) {
       onClickConnectCamera();
+    }
+    // obs-websocket 自動接続
+    if (await _localDataSource.isConnected()) {
+      onClickConnect();
     }
     await _onCreateUseCase.execute();
   }

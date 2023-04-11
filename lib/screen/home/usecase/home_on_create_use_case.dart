@@ -23,7 +23,6 @@ class HomeOnCreateUseCase {
       this._currentTimeGetter);
 
   Future<void> execute() async {
-    _stateNotifier.onAppStart(_currentTimeGetter.get());
     await _predict.load();
     _predictTask = () {
       final startTime = DateTime.now().millisecondsSinceEpoch;

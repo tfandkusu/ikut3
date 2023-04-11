@@ -29,7 +29,9 @@ class HomeScreen extends HookConsumerWidget {
       });
     });
     useEffect(() {
-      eventHandler.onCreate();
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        eventHandler.onCreate();
+      });
       return () {};
     }, []);
     // 横幅を取得
