@@ -19,6 +19,8 @@ class Strings {
 
   static String port = "サーバーポート";
 
+  static String connectWebSocketMessage = "obs-websocketに接続してください。";
+
   static String connect = "接続";
 
   static String connecting = "接続中";

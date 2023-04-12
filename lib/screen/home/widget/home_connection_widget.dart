@@ -22,6 +22,8 @@ class HomeConnectionWidget extends HookConsumerWidget {
         color: themeData.colorScheme.onSurface, fontWeight: FontWeight.bold);
     final valueStyle = themeData.typography.englishLike.bodyMedium
         ?.copyWith(color: themeData.colorScheme.onSurfaceVariant);
+    final messageStyle = themeData.typography.dense.bodyLarge
+        ?.copyWith(color: themeData.colorScheme.secondary);
     // 接続エラーダイアログ表示
     ref.listen(homeUiModelProvider, (previous, next) {
       checkOneShotOperation(previous, next,
@@ -48,35 +50,48 @@ class HomeConnectionWidget extends HookConsumerWidget {
     return Center(
       child: SizedBox(
         width: _contentWidth + 36,
-        child: Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              const SizedBox(width: 16),
-              Text(Strings.host, style: keyStyle),
-              const SizedBox(width: 8),
-              ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: _contentWidth / 4),
-                  child: Text(
-                    uiModel.connection.host,
-                    style: valueStyle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  )),
-              const SizedBox(width: 16),
-              Text(Strings.port, style: keyStyle),
-              const SizedBox(width: 8),
-              Text(uiModel.connection.port.toString(), style: valueStyle),
-              const SizedBox(width: 32),
-              FilledButton(
-                  style: buttonStyle,
-                  onPressed: uiModel.connection.connect
-                      ? null
-                      : () {
-                          eventHandler.onClickConnect();
-                        },
-                  child: Text(buttonText))
-            ]),
+        child: Column(
+          children: [
+            Visibility(
+              visible: !uiModel.connection.connect,
+              child: Center(
+                  child: Text(Strings.connectWebSocketMessage,
+                      style: messageStyle)),
+            ),
+            Visibility(
+                visible: !uiModel.connection.connect,
+                child: const SizedBox(height: 8)),
+            Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  const SizedBox(width: 16),
+                  Text(Strings.host, style: keyStyle),
+                  const SizedBox(width: 8),
+                  ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: _contentWidth / 4),
+                      child: Text(
+                        uiModel.connection.host,
+                        style: valueStyle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      )),
+                  const SizedBox(width: 16),
+                  Text(Strings.port, style: keyStyle),
+                  const SizedBox(width: 8),
+                  Text(uiModel.connection.port.toString(), style: valueStyle),
+                  const SizedBox(width: 32),
+                  FilledButton(
+                      style: buttonStyle,
+                      onPressed: uiModel.connection.connect
+                          ? null
+                          : () {
+                              eventHandler.onClickConnect();
+                            },
+                      child: Text(buttonText))
+                ]),
+          ],
+        ),
       ),
     );
   }
