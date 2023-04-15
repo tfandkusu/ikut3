@@ -31,7 +31,7 @@ class HomeOnCreateUseCase {
         // デスシーンでないときは0.5秒後にシーン分類する
         int baseDelayTime = 500;
         // デスシーンの時は8秒後にシーン分類を再開する。
-        if (death) {
+        if (death && _obsRepository.isConnected()) {
           // デスシーンの時はリプレイバッファを保存する。
           _obsRepository.saveReplayBuffer();
           _stateNotifier.onSaveReplayBuffer(_currentTimeGetter.get());

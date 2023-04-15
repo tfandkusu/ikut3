@@ -9,7 +9,7 @@ class LogStrings {
 
   static String connecting = "obs-websocketに接続しています。";
 
-  static String connected = "obs-websocketに接続しました";
+  static String connected = "obs-websocketに接続しました。";
 
   static String connectError = "obs-websocketへの接続に失敗しました";
 }

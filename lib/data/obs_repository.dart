@@ -17,6 +17,10 @@ class ObsRepository {
     _webSocketChannel = webSocketChannel;
   }
 
+  bool isConnected() {
+    return _webSocketChannel != null;
+  }
+
   void saveReplayBuffer() {
     final sendMessage = ObsSendMessage(
         op: 6,
