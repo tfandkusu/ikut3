@@ -28,4 +28,8 @@ class Strings {
   static String connected = "接続しました";
 
   static String connectErrorMessage = "obs-websocketへの接続に失敗しました。";
+
+  static String connectionSettingTitle = "接続先設定";
+
+  static String connectionSettingMessage = "接続先設定は工事中です";
 }

@@ -30,7 +30,7 @@ class HomeConnectionWidget extends HookConsumerWidget {
           (uiModel) => uiModel.connectStatus == HomeConnectStatus.error,
           (showError) {
         if (showError) {
-          _showConnectError(context);
+          _showDialog(context, Strings.error, Strings.connectErrorMessage);
           eventHandler.onConnectErrorConfirmed();
         }
       });
@@ -62,7 +62,7 @@ class HomeConnectionWidget extends HookConsumerWidget {
                 visible: !uiModel.connection.connect,
                 child: const SizedBox(height: 8)),
             Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
                   const SizedBox(width: 16),
@@ -80,6 +80,15 @@ class HomeConnectionWidget extends HookConsumerWidget {
                   Text(Strings.port, style: keyStyle),
                   const SizedBox(width: 8),
                   Text(uiModel.connection.port.toString(), style: valueStyle),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon:
+                        Icon(Icons.edit, color: themeData.colorScheme.primary),
+                    onPressed: () {
+                      _showDialog(context, Strings.connectionSettingTitle,
+                          Strings.connectionSettingMessage);
+                    },
+                  ),
                   const SizedBox(width: 32),
                   FilledButton(
                       style: buttonStyle,
@@ -96,8 +105,8 @@ class HomeConnectionWidget extends HookConsumerWidget {
     );
   }
 
-  /// 接続エラーダイアログを表示する。
-  void _showConnectError(BuildContext context) {
+  /// ダイアログを表示する。
+  void _showDialog(BuildContext context, String title, String message) {
     final themeData = Theme.of(context);
     final titleTextStyle = themeData.typography.dense.headlineMedium
         ?.copyWith(color: themeData.colorScheme.onSurface);
@@ -111,8 +120,8 @@ class HomeConnectionWidget extends HookConsumerWidget {
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-              title: Text(Strings.error, style: titleTextStyle),
-              content: Text(Strings.connectErrorMessage),
+              title: Text(title, style: titleTextStyle),
+              content: Text(message),
               actions: [
                 FilledButton(
                     style: buttonStyle,
