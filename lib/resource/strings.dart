@@ -19,7 +19,7 @@ class Strings {
 
   static String port = "サーバーポート";
 
-  static String connectWebSocketMessage = "obs-websocketに接続してください。";
+  static String connectWebSocketMessage = "obs-websocket に接続してください。";
 
   static String connect = "接続";
 
@@ -27,7 +27,7 @@ class Strings {
 
   static String connected = "接続しました";
 
-  static String connectErrorMessage = "obs-websocketへの接続に失敗しました。";
+  static String connectErrorMessage = "obs-websocket への接続に失敗しました。";
 
   static String connectionSettingTitle = "接続先設定";
 
