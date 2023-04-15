@@ -35,21 +35,43 @@ final webSocketProvider = Provider.autoDispose((ref) {
     final receiveMessage =
         ObsReceiveMessage.fromJson(json.decode(receiveMessageString));
     if (receiveMessage.op == 0) {
+      // 最初の挨拶
       const sendMessage =
           ObsSendMessage(op: 1, d: ObsSendMessageData.identify(rpcVersion: 1));
       final sendMessageString = json.encode(sendMessage.toJson());
       channel.sink.add(sendMessageString);
     } else if (receiveMessage.op == 2) {
+      // 疎通完了
       logStateNotifier.onConnected(currentTimeGetter.get());
       homeEventHandler.onConnected();
       obsRepository.setWebSocketChannel(channel);
+      obsRepository.getReplayBufferStatus();
     } else if (receiveMessage.op == 5) {
+      // OBSで発生したイベント
       final eventType = receiveMessage.d.eventType;
       if (eventType == 'ReplayBufferSaved') {
+        // リプレイバッファ保存が完了
         final path = receiveMessage.d.eventData?.savedReplayPath;
         if (path != null) {
           logStateNotifier.onReplayBufferSaved(currentTimeGetter.get(), path);
         }
+      } else if (eventType == "ReplayBufferStateChanged") {
+        // リプレイバッファの開始または終了
+        final outputActive = receiveMessage.d.eventData?.outputActive;
+        final outputState = receiveMessage.d.eventData?.outputState;
+        if (outputActive == true) {
+          // 開始された
+          logStateNotifier.onReplayBufferIsStarted(currentTimeGetter.get());
+        } else if (outputState == "OBS_WEBSOCKET_OUTPUT_STOPPING") {
+          // 終了した
+          logStateNotifier.onReplayBufferIsStopped(currentTimeGetter.get());
+        }
+      }
+    } else if (receiveMessage.op == 7) {
+      // リクエストに対する返答
+      if (receiveMessage.d.requestType == "GetReplayBufferStatus" &&
+          receiveMessage.d.responseData?.outputActive == false) {
+        logStateNotifier.onReplayBufferHasNotStarted(currentTimeGetter.get());
       }
     }
   }, onError: (error) {

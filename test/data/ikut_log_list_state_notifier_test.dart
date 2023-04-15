@@ -26,31 +26,65 @@ void main() {
       IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
       IkutLog.connected(dateTime: dateTime.copyWith(second: 2)),
     ]);
-
-    stateNotifier.onCameraStart(dateTime.copyWith(second: 3));
+    stateNotifier.onReplayBufferHasNotStarted(dateTime.copyWith(second: 3));
     expect(getUiModel(), [
       IkutLog.appStart(dateTime: dateTime.copyWith(second: 0)),
       IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
       IkutLog.connected(dateTime: dateTime.copyWith(second: 2)),
-      IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 3))
+      IkutLog.replayBufferHasNotStarted(dateTime: dateTime.copyWith(second: 3))
     ]);
-    stateNotifier.onSaveReplayBuffer(dateTime.copyWith(second: 4));
+    stateNotifier.onCameraStart(dateTime.copyWith(second: 4));
     expect(getUiModel(), [
       IkutLog.appStart(dateTime: dateTime.copyWith(second: 0)),
       IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
       IkutLog.connected(dateTime: dateTime.copyWith(second: 2)),
-      IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 3)),
-      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 4))
+      IkutLog.replayBufferHasNotStarted(dateTime: dateTime.copyWith(second: 3)),
+      IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 4))
     ]);
-    stateNotifier.onReplayBufferSaved(dateTime.copyWith(second: 5), path);
+    stateNotifier.onSaveReplayBuffer(dateTime.copyWith(second: 5));
     expect(getUiModel(), [
       IkutLog.appStart(dateTime: dateTime.copyWith(second: 0)),
       IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
       IkutLog.connected(dateTime: dateTime.copyWith(second: 2)),
-      IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 3)),
-      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 4)),
+      IkutLog.replayBufferHasNotStarted(dateTime: dateTime.copyWith(second: 3)),
+      IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 4)),
+      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 5))
+    ]);
+    stateNotifier.onReplayBufferSaved(dateTime.copyWith(second: 6), path);
+    expect(getUiModel(), [
+      IkutLog.appStart(dateTime: dateTime.copyWith(second: 0)),
+      IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
+      IkutLog.connected(dateTime: dateTime.copyWith(second: 2)),
+      IkutLog.replayBufferHasNotStarted(dateTime: dateTime.copyWith(second: 3)),
+      IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 4)),
+      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 5)),
       IkutLog.replayBufferSaved(
-          dateTime: dateTime.copyWith(second: 5), path: path)
+          dateTime: dateTime.copyWith(second: 6), path: path)
+    ]);
+    stateNotifier.onReplayBufferIsStarted(dateTime.copyWith(second: 7));
+    expect(getUiModel(), [
+      IkutLog.appStart(dateTime: dateTime.copyWith(second: 0)),
+      IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
+      IkutLog.connected(dateTime: dateTime.copyWith(second: 2)),
+      IkutLog.replayBufferHasNotStarted(dateTime: dateTime.copyWith(second: 3)),
+      IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 4)),
+      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 5)),
+      IkutLog.replayBufferSaved(
+          dateTime: dateTime.copyWith(second: 6), path: path),
+      IkutLog.replayBufferIsStarted(dateTime: dateTime.copyWith(second: 7))
+    ]);
+    stateNotifier.onReplayBufferIsStopped(dateTime.copyWith(second: 8));
+    expect(getUiModel(), [
+      IkutLog.appStart(dateTime: dateTime.copyWith(second: 0)),
+      IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
+      IkutLog.connected(dateTime: dateTime.copyWith(second: 2)),
+      IkutLog.replayBufferHasNotStarted(dateTime: dateTime.copyWith(second: 3)),
+      IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 4)),
+      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 5)),
+      IkutLog.replayBufferSaved(
+          dateTime: dateTime.copyWith(second: 6), path: path),
+      IkutLog.replayBufferIsStarted(dateTime: dateTime.copyWith(second: 7)),
+      IkutLog.replayBufferIsStopped(dateTime: dateTime.copyWith(second: 8))
     ]);
   });
   test("ikutLogListStateNotifierProvider error", () {

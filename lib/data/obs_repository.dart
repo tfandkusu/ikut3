@@ -21,6 +21,15 @@ class ObsRepository {
     return _webSocketChannel != null;
   }
 
+  void getReplayBufferStatus() {
+    final sendMessage = ObsSendMessage(
+        op: 6,
+        d: ObsSendMessageData.request(
+            requestType: "GetReplayBufferStatus", requestId: _uuid.v4()));
+    final sendMessageString = json.encode(sendMessage.toJson());
+    _webSocketChannel?.sink.add(sendMessageString);
+  }
+
   void saveReplayBuffer() {
     final sendMessage = ObsSendMessage(
         op: 6,

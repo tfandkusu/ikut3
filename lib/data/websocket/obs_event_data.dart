@@ -4,7 +4,10 @@ part 'obs_event_data.g.dart';
 
 @freezed
 class ObsEventData with _$ObsEventData {
-  const factory ObsEventData({String? savedReplayPath}) = _ObsEventData;
+  const factory ObsEventData(
+      {String? savedReplayPath,
+      bool? outputActive,
+      String? outputState}) = _ObsEventData;
 
   factory ObsEventData.fromJson(Map<String, dynamic> json) =>
       _$ObsEventDataFromJson(json);

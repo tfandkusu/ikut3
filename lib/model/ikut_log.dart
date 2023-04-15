@@ -27,4 +27,16 @@ class IkutLog with _$IkutLog {
   /// WebSocket接続失敗
   const factory IkutLog.connectError({required DateTime dateTime}) =
       ConnectError;
+
+  /// リプレイバッファが開始されていません。
+  const factory IkutLog.replayBufferHasNotStarted(
+      {required DateTime dateTime}) = ReplayBufferHasNotStarted;
+
+  /// リプレイバッファが開始しました。
+  const factory IkutLog.replayBufferIsStarted({required DateTime dateTime}) =
+      ReplayBufferIsStarted;
+
+  /// リプレイバッファが停止しました。
+  const factory IkutLog.replayBufferIsStopped({required DateTime dateTime}) =
+      ReplayBufferIsStopped;
 }
