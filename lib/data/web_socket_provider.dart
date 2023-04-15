@@ -56,14 +56,14 @@ final webSocketProvider = Provider.autoDispose((ref) {
           logStateNotifier.onReplayBufferSaved(currentTimeGetter.get(), path);
         }
       } else if (eventType == "ReplayBufferStateChanged") {
-        // リプレイバッファの開始または終了
+        // リプレイバッファの開始または停止
         final outputActive = receiveMessage.d.eventData?.outputActive;
         final outputState = receiveMessage.d.eventData?.outputState;
         if (outputActive == true) {
           // 開始された
           logStateNotifier.onReplayBufferIsStarted(currentTimeGetter.get());
         } else if (outputState == "OBS_WEBSOCKET_OUTPUT_STOPPING") {
-          // 終了した
+          // 停止された
           logStateNotifier.onReplayBufferIsStopped(currentTimeGetter.get());
         }
       }
