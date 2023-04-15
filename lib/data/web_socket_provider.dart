@@ -69,9 +69,12 @@ final webSocketProvider = Provider.autoDispose((ref) {
       }
     } else if (receiveMessage.op == 7) {
       // リクエストに対する返答
-      if (receiveMessage.d.requestType == "GetReplayBufferStatus" &&
-          receiveMessage.d.responseData?.outputActive == false) {
-        logStateNotifier.onReplayBufferHasNotStarted(currentTimeGetter.get());
+      if (receiveMessage.d.requestType == "GetReplayBufferStatus") {
+        if (receiveMessage.d.responseData?.outputActive == false) {
+          logStateNotifier.onReplayBufferHasNotStarted(currentTimeGetter.get());
+        } else if (receiveMessage.d.responseData == null) {
+          logStateNotifier.onReplayBufferIsDisabled(currentTimeGetter.get());
+        }
       }
     }
   }, onError: (error) {

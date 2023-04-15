@@ -39,4 +39,8 @@ class IkutLog with _$IkutLog {
   /// リプレイバッファが停止しました。
   const factory IkutLog.replayBufferIsStopped({required DateTime dateTime}) =
       ReplayBufferIsStopped;
+
+  /// リプレイバッファが有効になっていません。
+  const factory IkutLog.replayBufferIsDisabled({required DateTime dateTime}) =
+      ReplayBufferIsDisabled;
 }

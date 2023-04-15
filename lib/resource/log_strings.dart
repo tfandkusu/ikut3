@@ -18,4 +18,6 @@ class LogStrings {
   static String replayBufferIsStarted = "リプレイバッファが開始しました。";
 
   static String replayBufferIsStopped = "リプレイバッファが停止しました。";
+
+  static String replayBufferIsDisabled = "リプレイバッファが有効になっていません。";
 }
