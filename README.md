@@ -13,4 +13,4 @@ https://s3.ikut.app/
 
 # ご意見/ご要望
 
-ご意見/ご要望がありましたら、[Issues](https://github.com/tfandkusu/ikut3/issues)に投稿するか、Twitterでメンション頂ければ、できる限り対応いたします。
+ご意見/ご要望がありましたら、[Issues](https://github.com/tfandkusu/ikut3/issues)に投稿するか、[Twitter](https://twitter.com/tfandkusu)でメンションかDM頂ければ、できる限り対応いたします。
