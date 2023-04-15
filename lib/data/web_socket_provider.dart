@@ -17,6 +17,7 @@ final webSocketProvider = Provider.autoDispose((ref) {
   final homeEventHandler = ref.read(homeEventHandlerProvider);
   final currentTimeGetter = ref.read(currentTimeGetterProvider);
   final connection = ref.watch(webSocketConnectionStateNotifierProvider);
+  final obsRepository = ref.read(obsRepositoryProvider);
   if (!connection.connect) {
     return 0;
   }
@@ -41,7 +42,6 @@ final webSocketProvider = Provider.autoDispose((ref) {
     } else if (receiveMessage.op == 2) {
       logStateNotifier.onConnected(currentTimeGetter.get());
       homeEventHandler.onConnected();
-      final obsRepository = ref.read(obsRepositoryProvider);
       obsRepository.setWebSocketChannel(channel);
     } else if (receiveMessage.op == 5) {
       final eventType = receiveMessage.d.eventType;
@@ -54,6 +54,10 @@ final webSocketProvider = Provider.autoDispose((ref) {
     }
   }, onError: (error) {
     homeEventHandler.onConnectError();
+    obsRepository.setWebSocketChannel(null);
+  }, onDone: () {
+    homeEventHandler.onConnectError();
+    obsRepository.setWebSocketChannel(null);
   });
   return 0;
 });
