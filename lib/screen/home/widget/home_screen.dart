@@ -55,6 +55,8 @@ class HomeScreen extends HookConsumerWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(Strings.title),
+          elevation: 4,
+          scrolledUnderElevation: 4,
           actions: [
             IconButton(
               icon: const Icon(Icons.info_rounded),
