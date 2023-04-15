@@ -37,6 +37,18 @@ class IkutLogListStateNotifier extends StateNotifier<List<IkutLog>> {
       IkutLog.replayBufferSaved(dateTime: dateTime, path: path)
     ];
   }
+
+  void onReplayBufferHasNotStarted(DateTime dateTime) {
+    state = [...state, IkutLog.replayBufferHasNotStarted(dateTime: dateTime)];
+  }
+
+  void onReplayBufferIsStarted(DateTime dateTime) {
+    state = [...state, IkutLog.replayBufferIsStarted(dateTime: dateTime)];
+  }
+
+  void onReplayBufferIsStopped(DateTime dateTime) {
+    state = [...state, IkutLog.replayBufferIsStopped(dateTime: dateTime)];
+  }
 }
 
 final ikutLogListStateNotifierProvider =
