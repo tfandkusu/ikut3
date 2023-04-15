@@ -26,7 +26,8 @@ class HomeLogWidget extends StatelessWidget {
         connectError: (_) => LogStrings.connectError,
         replayBufferHasNotStarted: (_) => LogStrings.replayBufferHasNotStarted,
         replayBufferIsStarted: (_) => LogStrings.replayBufferIsStarted,
-        replayBufferIsStopped: (_) => LogStrings.replayBufferIsStopped);
+        replayBufferIsStopped: (_) => LogStrings.replayBufferIsStopped,
+        replayBufferIsDisabled: (_) => LogStrings.replayBufferIsDisabled);
     final timeTextStyle = themeData.typography.dense.bodyMedium?.copyWith(
         color: themeData.colorScheme.onSurfaceVariant,
         fontFeatures: [const FontFeature.tabularFigures()]);
@@ -39,7 +40,14 @@ class HomeLogWidget extends StatelessWidget {
     final rowChildren = <Widget>[];
     rowChildren.add(Text(timeString, style: timeTextStyle));
     rowChildren.add(const SizedBox(width: 16));
-    _log.maybeWhen(replayBufferSaved: (dateTime, uriString) {
+    final errorTextWidget = Expanded(
+        child: Text(
+      eventString,
+      style: errorTextStyle,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+    ));
+    _log.maybeWhen(replayBufferSaved: (_, uriString) {
       // 保存完了ケース
       rowChildren.add(Text(
         eventString,
@@ -53,33 +61,14 @@ class HomeLogWidget extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: pathTextStyle)));
-    }, connectError: (dateTime) {
-      rowChildren.add(Expanded(
-        child: Text(
-          eventString,
-          style: errorTextStyle,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
-      ));
-    }, replayBufferHasNotStarted: (dateTime) {
-      rowChildren.add(Expanded(
-        child: Text(
-          eventString,
-          style: errorTextStyle,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
-      ));
-    }, replayBufferIsStopped: (dateTime) {
-      rowChildren.add(Expanded(
-        child: Text(
-          eventString,
-          style: errorTextStyle,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
-      ));
+    }, connectError: (_) {
+      rowChildren.add(errorTextWidget);
+    }, replayBufferHasNotStarted: (_) {
+      rowChildren.add(errorTextWidget);
+    }, replayBufferIsStopped: (_) {
+      rowChildren.add(errorTextWidget);
+    }, replayBufferIsDisabled: (_) {
+      rowChildren.add(errorTextWidget);
     }, orElse: () {
       // それ以外ケース
       rowChildren.add(Expanded(

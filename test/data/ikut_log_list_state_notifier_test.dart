@@ -108,5 +108,12 @@ void main() {
       IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
       IkutLog.connectError(dateTime: dateTime.copyWith(second: 2)),
     ]);
+    stateNotifier.onReplayBufferIsDisabled(dateTime.copyWith(second: 3));
+    expect(getUiModel(), [
+      IkutLog.appStart(dateTime: dateTime.copyWith(second: 0)),
+      IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
+      IkutLog.connectError(dateTime: dateTime.copyWith(second: 2)),
+      IkutLog.replayBufferIsDisabled(dateTime: dateTime.copyWith(second: 3)),
+    ]);
   });
 }
