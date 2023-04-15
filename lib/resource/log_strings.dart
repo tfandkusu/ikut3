@@ -7,11 +7,11 @@ class LogStrings {
 
   static String replayBufferSaved = "保存完了";
 
-  static String connecting = "obs-websocketに接続しています。";
+  static String connecting = "obs-websocket に接続しています。";
 
-  static String connected = "obs-websocketに接続しました。";
+  static String connected = "obs-websocket に接続しました。";
 
-  static String connectError = "obs-websocketへの接続に失敗しました。";
+  static String connectError = "obs-websocket への接続に失敗しました。";
 
   static String replayBufferHasNotStarted = "リプレイバッファが開始されていません。";
 
