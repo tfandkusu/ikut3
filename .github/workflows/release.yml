@@ -7,7 +7,7 @@ on:
     branches:
       - release
 jobs:
-  staging: # job 名
+  release: # job 名
     # ubuntu で動かす
     runs-on: ubuntu-latest
     timeout-minutes: 10
