@@ -1,11 +1,17 @@
 # ワークフローの名前
-name: staging
+name: release
 # ワークフロー実行タイミングは
 on:
-  # staging ブランチへの PUSH
+  # release ブランチへの PUSH
   push:
     branches:
       - staging
+  # テスト用の記載
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
 jobs:
   staging: # job 名
     # ubuntu で動かす
@@ -30,4 +36,4 @@ jobs:
       - run: flutter pub run build_runner build
       - run: flutter build web
       # デプロイする
-      - run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }} --only hosting:staging
+      - run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }} --only hosting:release
