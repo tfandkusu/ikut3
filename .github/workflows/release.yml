@@ -5,7 +5,7 @@ on:
   # release ブランチへの PUSH
   push:
     branches:
-      - staging
+      - release
 jobs:
   staging: # job 名
     # ubuntu で動かす
