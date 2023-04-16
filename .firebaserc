@@ -7,6 +7,9 @@
       "hosting": {
         "staging": [
           "ikut3-staging"
+        ],
+        "release": [
+          "ikut4s3"
         ]
       }
     }

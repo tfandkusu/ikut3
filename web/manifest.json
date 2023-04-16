@@ -1,11 +1,11 @@
 {
-    "name": "ikut3",
-    "short_name": "ikut3",
+    "name": "iKut 3",
+    "short_name": "iKut 3",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "スプラトゥーン3で、やられたシーンをOBSのリプレイバッファで自動保存する",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

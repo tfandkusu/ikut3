@@ -2,7 +2,7 @@
 name: check
 # ワークフロー実行タイミングは
 on:
-  # mainブランチへのPUSH
+  # main ブランチへの PUSH
   push:
     branches:
       - main
@@ -13,17 +13,17 @@ on:
       - synchronize
       - reopened
 jobs:
-  check: # job名
-    # ubuntuで動かす
+  check: # job 名
+    # ubuntu で動かす
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       # ソースコードのチェックアウト
       - uses: actions/checkout@v3
         with:
-          # Codecovのために必要な設定
+          # Codecov のために必要な設定
           fetch-depth: 0
-      # Flutter環境のセットアップ
+      # Flutter 環境のセットアップ
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.7.7'
@@ -31,18 +31,18 @@ jobs:
           cache: true
       # 依存ライブラリのダウンロード
       - run: flutter pub get
-      # freezedのためにbuild_runnerの実行
+      # freezed のために build_runner の実行
       - run: flutter pub run build_runner build
       # フォーマットの確認
       - run: dart format --set-exit-if-changed .
-      # lintチェック
+      # lint チェック
       - run: flutter analyze
       # 単体テストの実行とカバレッジレポートの出力
       - run: flutter test --coverage
         # 日付処理のテストがあるので、ローカルタイムを日本にする
         env:
           TZ: Asia/Tokyo
-      # カバレッジレポートをCodecovに送る
+      # カバレッジレポートを Codecov に送る
       - uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
