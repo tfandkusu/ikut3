@@ -6,12 +6,6 @@ on:
   push:
     branches:
       - staging
-  # テスト用の記載
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
 jobs:
   staging: # job 名
     # ubuntu で動かす
