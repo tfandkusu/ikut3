@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'ikut_scene.dart';
+
 part 'ikut_log.freezed.dart';
 
 @freezed
@@ -9,6 +11,10 @@ class IkutLog with _$IkutLog {
 
   /// カメラの取り込みを開始しました。
   const factory IkutLog.cameraStart({required DateTime dateTime}) = CameraStart;
+
+  /// シーンを検出
+  const factory IkutLog.scene(
+      {required DateTime dateTime, required IkutScene scene}) = Scene;
 
   /// OBSにリプレイバッファ保存を要求しました。
   const factory IkutLog.saveReplayBuffer({required DateTime dateTime}) =
