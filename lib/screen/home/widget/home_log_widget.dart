@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../model/ikut_log.dart';
+import '../../../model/ikut_scene.dart';
 import '../../../resource/log_strings.dart';
 
 class HomeLogWidget extends StatelessWidget {
@@ -19,6 +20,14 @@ class HomeLogWidget extends StatelessWidget {
     final eventString = _log.when(
         appStart: (_) => LogStrings.appStart,
         cameraStart: (_) => LogStrings.cameraStart,
+        scene: (_, IkutScene scene) {
+          switch (scene) {
+            case IkutScene.kill:
+              return LogStrings.killScene;
+            case IkutScene.death:
+              return LogStrings.deathScene;
+          }
+        },
         saveReplayBuffer: (_) => LogStrings.saveReplayBuffer,
         replayBufferSaved: (_, uriString) => LogStrings.replayBufferSaved,
         connecting: (_) => LogStrings.connecting,
@@ -62,6 +71,7 @@ class HomeLogWidget extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: pathTextStyle)));
     }, connectError: (_) {
+      // エラーケース
       rowChildren.add(errorTextWidget);
     }, replayBufferHasNotStarted: (_) {
       rowChildren.add(errorTextWidget);
