@@ -16,6 +16,10 @@ class LocalDataSource {
 
   static const defaultPort = 4455;
 
+  static const _keySaveWhenKillScene = "saveWhenKillScene";
+
+  static const _keySaveWhenDeathScene = "saveWhenDeathScene";
+
   Future<void> setCameraHasStarted(bool cameraHasConnected) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyCameraHasStarted, cameraHasConnected);
@@ -54,6 +58,26 @@ class LocalDataSource {
   Future<bool> isConnected() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_keyConnected) ?? false;
+  }
+
+  Future<void> setSaveWhenKillScene(bool saveWhenKillScene) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keySaveWhenKillScene, saveWhenKillScene);
+  }
+
+  Future<bool> isSaveWhenKillScene() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keySaveWhenKillScene) ?? false;
+  }
+
+  Future<void> setSaveWhenDeathScene(bool saveWhenDeathScene) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keySaveWhenDeathScene, saveWhenDeathScene);
+  }
+
+  Future<bool> isSaveWhenDeathScene() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keySaveWhenDeathScene) ?? true;
   }
 }
 
