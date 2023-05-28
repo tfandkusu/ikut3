@@ -14,6 +14,8 @@ void main() {
     expect(await localDataSource.getWebSocketHost(), "localhost");
     expect(await localDataSource.getWebSocketPort(), 4455);
     expect(await localDataSource.isConnected(), false);
+    expect(await localDataSource.isSaveWhenKillScene(), false);
+    expect(await localDataSource.isSaveWhenDeathScene(), true);
     // 保存の確認
     await localDataSource.setCameraHasStarted(true);
     expect(await localDataSource.isCameraHasStarted(), true);
@@ -27,5 +29,9 @@ void main() {
     expect(await localDataSource.isConnected(), true);
     await localDataSource.setConnected(false);
     expect(await localDataSource.isConnected(), false);
+    await localDataSource.setSaveWhenKillScene(true);
+    expect(await localDataSource.isSaveWhenKillScene(), true);
+    await localDataSource.setSaveWhenDeathScene(false);
+    expect(await localDataSource.isSaveWhenDeathScene(), false);
   });
 }
