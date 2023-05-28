@@ -2,11 +2,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
 import 'package:ikut3/model/ikut_log.dart';
+import 'package:ikut3/model/ikut_scene.dart';
 
 void main() {
-  test("ikutLogListStateNotifierProvider success", () {
+  test("ikutLogListStateNotifierProvider setUp success", () {
     final dateTime = DateTime.now();
-    const path = "/Users/tfandkusu/Movie/replay.mp4";
     final container = ProviderContainer();
     final stateNotifier =
         container.read(ikutLogListStateNotifierProvider.notifier);
@@ -41,50 +41,63 @@ void main() {
       IkutLog.replayBufferHasNotStarted(dateTime: dateTime.copyWith(second: 3)),
       IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 4))
     ]);
-    stateNotifier.onSaveReplayBuffer(dateTime.copyWith(second: 5));
+    stateNotifier.onReplayBufferIsStarted(dateTime.copyWith(second: 5));
     expect(getUiModel(), [
       IkutLog.appStart(dateTime: dateTime.copyWith(second: 0)),
       IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
       IkutLog.connected(dateTime: dateTime.copyWith(second: 2)),
       IkutLog.replayBufferHasNotStarted(dateTime: dateTime.copyWith(second: 3)),
       IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 4)),
-      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 5))
+      IkutLog.replayBufferIsStarted(dateTime: dateTime.copyWith(second: 5))
     ]);
-    stateNotifier.onReplayBufferSaved(dateTime.copyWith(second: 6), path);
+    stateNotifier.onReplayBufferIsStopped(dateTime.copyWith(second: 6));
     expect(getUiModel(), [
       IkutLog.appStart(dateTime: dateTime.copyWith(second: 0)),
       IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
       IkutLog.connected(dateTime: dateTime.copyWith(second: 2)),
       IkutLog.replayBufferHasNotStarted(dateTime: dateTime.copyWith(second: 3)),
       IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 4)),
-      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 5)),
-      IkutLog.replayBufferSaved(
-          dateTime: dateTime.copyWith(second: 6), path: path)
+      IkutLog.replayBufferIsStarted(dateTime: dateTime.copyWith(second: 5)),
+      IkutLog.replayBufferIsStopped(dateTime: dateTime.copyWith(second: 6))
     ]);
-    stateNotifier.onReplayBufferIsStarted(dateTime.copyWith(second: 7));
+  });
+  test("ikutLogListStateNotifierProvider saveReplayBuffer success", () {
+    final dateTime = DateTime.now();
+    final container = ProviderContainer();
+    const path = "/Users/tfandkusu/Movie/replay.mp4";
+    final stateNotifier =
+        container.read(ikutLogListStateNotifierProvider.notifier);
+    getUiModel() => container.read(ikutLogListStateNotifierProvider);
+    expect(getUiModel(), []);
+
+    stateNotifier.onScene(dateTime.copyWith(second: 0), IkutScene.kill);
     expect(getUiModel(), [
-      IkutLog.appStart(dateTime: dateTime.copyWith(second: 0)),
-      IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
-      IkutLog.connected(dateTime: dateTime.copyWith(second: 2)),
-      IkutLog.replayBufferHasNotStarted(dateTime: dateTime.copyWith(second: 3)),
-      IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 4)),
-      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 5)),
-      IkutLog.replayBufferSaved(
-          dateTime: dateTime.copyWith(second: 6), path: path),
-      IkutLog.replayBufferIsStarted(dateTime: dateTime.copyWith(second: 7))
+      IkutLog.scene(
+          dateTime: dateTime.copyWith(second: 0), scene: IkutScene.kill)
     ]);
-    stateNotifier.onReplayBufferIsStopped(dateTime.copyWith(second: 8));
+    stateNotifier.onSaveReplayBuffer(dateTime.copyWith(second: 1));
     expect(getUiModel(), [
-      IkutLog.appStart(dateTime: dateTime.copyWith(second: 0)),
-      IkutLog.connecting(dateTime: dateTime.copyWith(second: 1)),
-      IkutLog.connected(dateTime: dateTime.copyWith(second: 2)),
-      IkutLog.replayBufferHasNotStarted(dateTime: dateTime.copyWith(second: 3)),
-      IkutLog.cameraStart(dateTime: dateTime.copyWith(second: 4)),
-      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 5)),
+      IkutLog.scene(
+          dateTime: dateTime.copyWith(second: 0), scene: IkutScene.kill),
+      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 1))
+    ]);
+    stateNotifier.onReplayBufferSaved(dateTime.copyWith(second: 2), path);
+    expect(getUiModel(), [
+      IkutLog.scene(
+          dateTime: dateTime.copyWith(second: 0), scene: IkutScene.kill),
+      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 1)),
       IkutLog.replayBufferSaved(
-          dateTime: dateTime.copyWith(second: 6), path: path),
-      IkutLog.replayBufferIsStarted(dateTime: dateTime.copyWith(second: 7)),
-      IkutLog.replayBufferIsStopped(dateTime: dateTime.copyWith(second: 8))
+          dateTime: dateTime.copyWith(second: 2), path: path)
+    ]);
+    stateNotifier.onScene(dateTime.copyWith(second: 3), IkutScene.death);
+    expect(getUiModel(), [
+      IkutLog.scene(
+          dateTime: dateTime.copyWith(second: 0), scene: IkutScene.kill),
+      IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 1)),
+      IkutLog.replayBufferSaved(
+          dateTime: dateTime.copyWith(second: 2), path: path),
+      IkutLog.scene(
+          dateTime: dateTime.copyWith(second: 3), scene: IkutScene.death),
     ]);
   });
   test("ikutLogListStateNotifierProvider error", () {
