@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:ikut3/model/web_socket_connection.dart';
 
+import '../../../model/ikut_config.dart';
 import '../../../model/ikut_log.dart';
 
 part 'home_ui_model.freezed.dart';
@@ -36,9 +37,11 @@ class HomeUiModel with _$HomeUiModel {
   /// [videoStatus] ビデオ部分になにを表示するか
   /// [connection] obs-websocket 接続情報
   /// [connectStatus] obs-websocket 接続状態
+  /// [config] ユーザ設定
   const factory HomeUiModel(
       {required List<IkutLog> logs,
       required HomeVideoStatus videoStatus,
       required WebSocketConnection connection,
-      required HomeConnectStatus connectStatus}) = _HomeUiModel;
+      required HomeConnectStatus connectStatus,
+      required IkutConfig config}) = _HomeUiModel;
 }

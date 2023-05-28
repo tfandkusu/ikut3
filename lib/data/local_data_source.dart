@@ -20,6 +20,10 @@ class LocalDataSource {
 
   static const _keySaveWhenDeathScene = "saveWhenDeathScene";
 
+  static const defaultSaveWhenKillScene = false;
+
+  static const defaultSaveWhenDeathScene = true;
+
   Future<void> setCameraHasStarted(bool cameraHasConnected) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyCameraHasStarted, cameraHasConnected);
@@ -67,7 +71,7 @@ class LocalDataSource {
 
   Future<bool> isSaveWhenKillScene() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_keySaveWhenKillScene) ?? false;
+    return prefs.getBool(_keySaveWhenKillScene) ?? defaultSaveWhenKillScene;
   }
 
   Future<void> setSaveWhenDeathScene(bool saveWhenDeathScene) async {
@@ -77,7 +81,7 @@ class LocalDataSource {
 
   Future<bool> isSaveWhenDeathScene() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_keySaveWhenDeathScene) ?? true;
+    return prefs.getBool(_keySaveWhenDeathScene) ?? defaultSaveWhenDeathScene;
   }
 }
 
