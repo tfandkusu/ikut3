@@ -85,6 +85,18 @@ class HomeEventHandler {
     _connectionStateNotifier.setConnect(false);
     _stateNotifier.resetConnectStatus();
   }
+
+  /// たおしたチェック変更
+  Future<void> onChangeSaveWhenKillScene(bool value) async {
+    _ikutConfigStateNotifier.setSaveWhenKillScene(value);
+    await _localDataSource.setSaveWhenKillScene(value);
+  }
+
+  /// やられたチェック変更
+  Future<void> onChangeSaveWhenDeathScene(bool value) async {
+    _ikutConfigStateNotifier.setSaveWhenDeathScene(value);
+    await _localDataSource.setSaveWhenDeathScene(value);
+  }
 }
 
 final homeEventHandlerProvider = Provider((ref) {

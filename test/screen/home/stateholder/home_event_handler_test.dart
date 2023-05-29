@@ -224,4 +224,36 @@ void main() {
       () => homeUiModelStateNotifier.resetConnectStatus()
     ]);
   });
+
+  test('HomeEventHandler#onChangeSaveWhenKillScene', () async {
+    when(() => localDataSource.setSaveWhenKillScene(true))
+        .thenAnswer((_) async {});
+    final container = ProviderContainer(overrides: [
+      ikutConfigStateNotifierProvider
+          .overrideWith((ref) => ikutConfigStateNotifier),
+      localDataSourceProvider.overrideWithValue(localDataSource)
+    ]);
+    final eventHandler = container.read(homeEventHandlerProvider);
+    await eventHandler.onChangeSaveWhenKillScene(true);
+    verifyInOrder([
+      () => ikutConfigStateNotifier.setSaveWhenKillScene(true),
+      () => localDataSource.setSaveWhenKillScene(true)
+    ]);
+  });
+
+  test('HomeEventHandler#onChangeSaveWhenDeathScene', () async {
+    when(() => localDataSource.setSaveWhenDeathScene(true))
+        .thenAnswer((_) async {});
+    final container = ProviderContainer(overrides: [
+      ikutConfigStateNotifierProvider
+          .overrideWith((ref) => ikutConfigStateNotifier),
+      localDataSourceProvider.overrideWithValue(localDataSource)
+    ]);
+    final eventHandler = container.read(homeEventHandlerProvider);
+    await eventHandler.onChangeSaveWhenDeathScene(true);
+    verifyInOrder([
+      () => ikutConfigStateNotifier.setSaveWhenDeathScene(true),
+      () => localDataSource.setSaveWhenDeathScene(true)
+    ]);
+  });
 }
