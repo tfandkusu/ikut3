@@ -15,7 +15,7 @@ class PrivacyStrings {
   static String head4 = 'アクセス解析ツールについて';
 
   static String body4 =
-      '「iKut 3」ではアプリの分析と改善のため、アクセス解析ツール「Firebase Analytics」を利用し統計情報を収集しています。統計情報は匿名で収集されており、個人を特定するものではありません。';
+      '「iKut 3」ではアプリの分析と改善のため、アクセス解析ツール「Google Analytics」を利用し統計情報を収集しています。統計情報は匿名で収集されており、個人を特定するものではありません。';
 
   static String close = '閉じる';
 }
