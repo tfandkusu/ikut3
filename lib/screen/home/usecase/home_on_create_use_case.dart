@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../data/ikut_log_list_state_notifier.dart';
 import '../../../data/obs_repository.dart';
+import '../../../model/ikut_scene.dart';
 import '../../../util/current_time_provider.dart';
 import '../../../util/prediction/predict.dart';
 import '../../../util/prediction/predict_provider.dart';
@@ -22,20 +23,45 @@ class HomeOnCreateUseCase {
   HomeOnCreateUseCase(this._predict, this._obsRepository, this._stateNotifier,
       this._currentTimeGetter);
 
+  // たおしたシーン中フラグ
+  bool _killScene = false;
+
   Future<void> execute() async {
     await _predict.load();
     _predictTask = () {
       final startTime = DateTime.now().millisecondsSinceEpoch;
-      _predict.predict((count, death) {
+      _predict.predict((count, label) {
         final endTime = DateTime.now().millisecondsSinceEpoch;
         // デスシーンでないときは0.5秒後にシーン分類する
         int baseDelayTime = 500;
-        // デスシーンの時は8秒後にシーン分類を再開する。
-        if (death && _obsRepository.isConnected()) {
-          // デスシーンの時はリプレイバッファを保存する。
-          _obsRepository.saveReplayBuffer();
-          _stateNotifier.onSaveReplayBuffer(_currentTimeGetter.get());
-          baseDelayTime = 8000;
+        if (_obsRepository.isConnected()) {
+          final currentTime = _currentTimeGetter.get();
+          switch (label) {
+            case PredictLabel.kill:
+              if (!_killScene) {
+                _stateNotifier.onScene(currentTime, IkutScene.kill);
+              }
+              _killScene = true;
+              break;
+            case PredictLabel.death:
+              _killScene = false;
+              // デスシーンの時はリプレイバッファを保存する。
+              _obsRepository.saveReplayBuffer();
+              _stateNotifier.onScene(currentTime, IkutScene.death);
+              _stateNotifier.onSaveReplayBuffer(currentTime);
+              // デスシーンの時は8秒後にシーン分類を再開する。
+              baseDelayTime = 8000;
+              break;
+            case PredictLabel.other:
+              if (_killScene) {
+                _obsRepository.saveReplayBuffer();
+                _stateNotifier.onSaveReplayBuffer(currentTime);
+              }
+              _killScene = false;
+              break;
+          }
+        } else {
+          _killScene = false;
         }
         final delay = max(baseDelayTime - (endTime - startTime), 0).toInt();
         Future.delayed(Duration(milliseconds: delay), () {
