@@ -32,4 +32,10 @@ class Strings {
   static String connectionSettingTitle = "接続先設定";
 
   static String connectionSettingMessage = "接続先設定は工事中です";
+
+  static String saveScene = "保存シーン";
+
+  static String sceneKill = "たおした";
+
+  static String sceneDeath = "やられた";
 }
