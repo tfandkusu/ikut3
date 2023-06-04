@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:ikut3/data/ikut_config_state_notifier.dart';
+import 'package:ikut3/data/config_repository.dart';
+import 'package:ikut3/data/config_state_notifier.dart';
 import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
 import 'package:ikut3/data/local_data_source.dart';
 import 'package:ikut3/data/web_socket_connection_state_notifier.dart';
@@ -22,8 +23,9 @@ class MockHomeUiModelStateNotifier extends Mock
 
 class MockLocalDataSource extends Mock implements LocalDataSource {}
 
-class MockIkutConfigStateNotifier extends Mock
-    implements IkutConfigStateNotifier {}
+class MockConfigRepository extends Mock implements ConfigRepository {}
+
+class MockConfigStateNotifier extends Mock implements ConfigStateNotifier {}
 
 class MockWebSocketConnectionStateNotifier extends Mock
     implements WebSocketConnectionStateNotifier {}
@@ -34,18 +36,14 @@ void main() {
   final currentTimeGetter = MockCurrentTimeGetter();
   final homeUiModelStateNotifier = MockHomeUiModelStateNotifier();
   final localDataSource = MockLocalDataSource();
-  final ikutConfigStateNotifier = MockIkutConfigStateNotifier();
+  final configRepository = MockConfigRepository();
+  final ikutConfigStateNotifier = MockConfigStateNotifier();
   final webSocketConnectionStateNotifier = WebSocketConnectionStateNotifier();
   test('HomeEventHandler#onCreate カメラの許可をまだ出していない。obs-websocketに自動接続しない。',
       () async {
     final now = DateTime.now();
     when(() => currentTimeGetter.get()).thenReturn(now);
-    when(() => localDataSource.isSaveWhenKillScene()).thenAnswer((_) async {
-      return false;
-    });
-    when(() => localDataSource.isSaveWhenDeathScene()).thenAnswer((_) async {
-      return true;
-    });
+    when(() => configRepository.load()).thenAnswer((_) async {});
     when(() => localDataSource.isCameraHasStarted()).thenAnswer((_) async {
       return false;
     });
@@ -58,18 +56,16 @@ void main() {
       ikutLogListStateNotifierProvider
           .overrideWith((ref) => logListStateNotifier),
       homeOnCreateUseCase.overrideWithValue(onCreateUseCase),
+      configRepositoryProvider.overrideWithValue(configRepository),
       localDataSourceProvider.overrideWithValue(localDataSource),
-      ikutConfigStateNotifierProvider
+      configStateNotifierProvider
           .overrideWith((ref) => ikutConfigStateNotifier),
     ]);
     final eventHandler = container.read(homeEventHandlerProvider);
     await eventHandler.onCreate();
     verifyInOrder([
       () => logListStateNotifier.onAppStart(now),
-      () => localDataSource.isSaveWhenKillScene(),
-      () => localDataSource.isSaveWhenDeathScene(),
-      () => ikutConfigStateNotifier.setSaveWhenKillScene(false),
-      () => ikutConfigStateNotifier.setSaveWhenDeathScene(true),
+      () => configRepository.load(),
       () => localDataSource.isCameraHasStarted(),
       () => localDataSource.isConnected(),
       () => onCreateUseCase.execute()
@@ -97,7 +93,7 @@ void main() {
       homeUiModelStateNotifierProvider
           .overrideWith((ref) => homeUiModelStateNotifier),
       localDataSourceProvider.overrideWithValue(localDataSource),
-      ikutConfigStateNotifierProvider
+      configStateNotifierProvider
           .overrideWith((ref) => ikutConfigStateNotifier),
       ikutLogListStateNotifierProvider
           .overrideWith((ref) => logListStateNotifier),
@@ -226,34 +222,30 @@ void main() {
   });
 
   test('HomeEventHandler#onChangeSaveWhenKillScene', () async {
-    when(() => localDataSource.setSaveWhenKillScene(true))
+    when(() => configRepository.setSaveWhenKillScene(true))
         .thenAnswer((_) async {});
     final container = ProviderContainer(overrides: [
-      ikutConfigStateNotifierProvider
+      configStateNotifierProvider
           .overrideWith((ref) => ikutConfigStateNotifier),
-      localDataSourceProvider.overrideWithValue(localDataSource)
+      configRepositoryProvider.overrideWithValue(configRepository),
     ]);
     final eventHandler = container.read(homeEventHandlerProvider);
     await eventHandler.onChangeSaveWhenKillScene(true);
     verifyInOrder([
-      () => ikutConfigStateNotifier.setSaveWhenKillScene(true),
-      () => localDataSource.setSaveWhenKillScene(true)
+      () => configRepository.setSaveWhenKillScene(true),
     ]);
   });
 
   test('HomeEventHandler#onChangeSaveWhenDeathScene', () async {
-    when(() => localDataSource.setSaveWhenDeathScene(true))
+    when(() => configRepository.setSaveWhenDeathScene(true))
         .thenAnswer((_) async {});
     final container = ProviderContainer(overrides: [
-      ikutConfigStateNotifierProvider
+      configStateNotifierProvider
           .overrideWith((ref) => ikutConfigStateNotifier),
-      localDataSourceProvider.overrideWithValue(localDataSource)
+      configRepositoryProvider.overrideWithValue(configRepository),
     ]);
     final eventHandler = container.read(homeEventHandlerProvider);
     await eventHandler.onChangeSaveWhenDeathScene(true);
-    verifyInOrder([
-      () => ikutConfigStateNotifier.setSaveWhenDeathScene(true),
-      () => localDataSource.setSaveWhenDeathScene(true)
-    ]);
+    verifyInOrder([() => configRepository.setSaveWhenDeathScene(true)]);
   });
 }

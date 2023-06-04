@@ -3,14 +3,14 @@ import 'package:ikut3/data/local_data_source.dart';
 
 import '../model/ikut_config.dart';
 
-class IkutConfigStateNotifier extends StateNotifier<IkutConfig> {
-  IkutConfigStateNotifier()
+class ConfigStateNotifier extends StateNotifier<IkutConfig> {
+  ConfigStateNotifier()
       : super(const IkutConfig(
           saveWhenKillScene: LocalDataSource.defaultSaveWhenKillScene,
           saveWhenDeathScene: LocalDataSource.defaultSaveWhenDeathScene,
         ));
 
-  IkutConfigStateNotifier.override(IkutConfig config) : super(config);
+  ConfigStateNotifier.override(IkutConfig config) : super(config);
 
   void setSaveWhenKillScene(bool saveWhenKillScene) {
     state = state.copyWith(saveWhenKillScene: saveWhenKillScene);
@@ -21,6 +21,6 @@ class IkutConfigStateNotifier extends StateNotifier<IkutConfig> {
   }
 }
 
-final ikutConfigStateNotifierProvider =
-    StateNotifierProvider<IkutConfigStateNotifier, IkutConfig>(
-        (ref) => IkutConfigStateNotifier());
+final configStateNotifierProvider =
+    StateNotifierProvider<ConfigStateNotifier, IkutConfig>(
+        (ref) => ConfigStateNotifier());

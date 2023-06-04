@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ikut3/data/config_repository.dart';
 
 import '../../../data/ikut_log_list_state_notifier.dart';
 import '../../../data/obs_repository.dart';
@@ -14,14 +15,16 @@ class HomeOnCreateUseCase {
 
   final ObsRepository _obsRepository;
 
+  final ConfigRepository _configRepository;
+
   final IkutLogListStateNotifier _stateNotifier;
 
   final CurrentTimeGetter _currentTimeGetter;
 
   Function _predictTask = () {};
 
-  HomeOnCreateUseCase(this._predict, this._obsRepository, this._stateNotifier,
-      this._currentTimeGetter);
+  HomeOnCreateUseCase(this._predict, this._obsRepository,
+      this._configRepository, this._stateNotifier, this._currentTimeGetter);
 
   // たおしたシーン中フラグ
   bool _killScene = false;
@@ -36,24 +39,31 @@ class HomeOnCreateUseCase {
         int baseDelayTime = 500;
         if (_obsRepository.isConnected()) {
           final currentTime = _currentTimeGetter.get();
+          final config = _configRepository.getConfig();
           switch (label) {
             case PredictLabel.kill:
-              if (!_killScene) {
+              if (!_killScene && config.saveWhenKillScene) {
                 _stateNotifier.onScene(currentTime, IkutScene.kill);
               }
               _killScene = true;
               break;
             case PredictLabel.death:
+              if (config.saveWhenDeathScene || config.saveWhenKillScene) {
+                // デスシーンの時はリプレイバッファを保存する。
+                // 「たおした」と「やられた」が同時に表示された場合は「やられた」扱いで保存する。
+                if (config.saveWhenDeathScene) {
+                  _stateNotifier.onScene(currentTime, IkutScene.death);
+                }
+                _obsRepository.saveReplayBuffer();
+                _stateNotifier.onSaveReplayBuffer(currentTime);
+              }
               _killScene = false;
-              // デスシーンの時はリプレイバッファを保存する。
-              _obsRepository.saveReplayBuffer();
-              _stateNotifier.onScene(currentTime, IkutScene.death);
-              _stateNotifier.onSaveReplayBuffer(currentTime);
               // デスシーンの時は8秒後にシーン分類を再開する。
               baseDelayTime = 8000;
               break;
             case PredictLabel.other:
-              if (_killScene) {
+              // 「○○をたおした」が消えたタイミングでリプレイバッファを保存する。
+              if (_killScene && config.saveWhenKillScene) {
                 _obsRepository.saveReplayBuffer();
                 _stateNotifier.onSaveReplayBuffer(currentTime);
               }
@@ -77,6 +87,7 @@ final homeOnCreateUseCase = Provider((ref) {
   return HomeOnCreateUseCase(
       ref.read(predictProvider),
       ref.read(obsRepositoryProvider),
+      ref.read(configRepositoryProvider),
       ref.read(ikutLogListStateNotifierProvider.notifier),
       ref.read(currentTimeGetterProvider));
 });

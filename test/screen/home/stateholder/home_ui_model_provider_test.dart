@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:ikut3/data/ikut_config_state_notifier.dart';
+import 'package:ikut3/data/config_state_notifier.dart';
 import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
 import 'package:ikut3/data/local_data_source.dart';
 import 'package:ikut3/data/web_socket_connection_state_notifier.dart';
@@ -31,8 +31,8 @@ void main() {
           .overrideWith((ref) => IkutLogListStateNotifier.override(logs)),
       webSocketConnectionStateNotifierProvider.overrideWith(
           (ref) => WebSocketConnectionStateNotifier.override(connection)),
-      ikutConfigStateNotifierProvider
-          .overrideWith((ref) => IkutConfigStateNotifier.override(config))
+      configStateNotifierProvider
+          .overrideWith((ref) => ConfigStateNotifier.override(config))
     ]);
     getUiModel() => container.read(homeUiModelProvider);
     expect(

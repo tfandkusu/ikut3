@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:ikut3/data/ikut_config_state_notifier.dart';
+import 'package:ikut3/data/config_repository.dart';
 import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model_state_notifier.dart';
 import 'package:ikut3/util/current_time_provider.dart';
@@ -19,7 +19,7 @@ class HomeEventHandler {
 
   final LocalDataSource _localDataSource;
 
-  final IkutConfigStateNotifier _ikutConfigStateNotifier;
+  final ConfigRepository _configRepository;
 
   final WebSocketConnectionStateNotifier _connectionStateNotifier;
 
@@ -29,17 +29,15 @@ class HomeEventHandler {
       this._currentTimeGetter,
       this._stateNotifier,
       this._localDataSource,
-      this._ikutConfigStateNotifier,
+      this._configRepository,
       this._connectionStateNotifier);
 
   Future<void> onCreate() async {
     // ログ「起動しました」を追加。
     _logListStateNotifier.onAppStart(_currentTimeGetter.get());
     // 設定読み込み
-    final saveWhenKillScene = await _localDataSource.isSaveWhenKillScene();
-    final saveWhenDeathScene = await _localDataSource.isSaveWhenDeathScene();
-    _ikutConfigStateNotifier.setSaveWhenKillScene(saveWhenKillScene);
-    _ikutConfigStateNotifier.setSaveWhenDeathScene(saveWhenDeathScene);
+    await _configRepository.load();
+    // TODO こちらも Repository に移動する
     // カメラ自動接続
     if (await _localDataSource.isCameraHasStarted()) {
       onClickConnectCamera();
@@ -88,14 +86,12 @@ class HomeEventHandler {
 
   /// たおしたチェック変更
   Future<void> onChangeSaveWhenKillScene(bool value) async {
-    _ikutConfigStateNotifier.setSaveWhenKillScene(value);
-    await _localDataSource.setSaveWhenKillScene(value);
+    await _configRepository.setSaveWhenKillScene(value);
   }
 
   /// やられたチェック変更
   Future<void> onChangeSaveWhenDeathScene(bool value) async {
-    _ikutConfigStateNotifier.setSaveWhenDeathScene(value);
-    await _localDataSource.setSaveWhenDeathScene(value);
+    await _configRepository.setSaveWhenDeathScene(value);
   }
 }
 
@@ -106,6 +102,6 @@ final homeEventHandlerProvider = Provider((ref) {
       ref.read(currentTimeGetterProvider),
       ref.read(homeUiModelStateNotifierProvider.notifier),
       ref.read(localDataSourceProvider),
-      ref.read(ikutConfigStateNotifierProvider.notifier),
+      ref.read(configRepositoryProvider),
       ref.read(webSocketConnectionStateNotifierProvider.notifier));
 });
