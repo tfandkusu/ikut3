@@ -1,13 +1,13 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:ikut3/data/local_data_source.dart';
+import 'package:ikut3/data/config_repository.dart';
 
 import '../model/ikut_config.dart';
 
 class ConfigStateNotifier extends StateNotifier<IkutConfig> {
   ConfigStateNotifier()
       : super(const IkutConfig(
-          saveWhenKillScene: LocalDataSource.defaultSaveWhenKillScene,
-          saveWhenDeathScene: LocalDataSource.defaultSaveWhenDeathScene,
+          saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
+          saveWhenDeathScene: ConfigRepository.defaultSaveWhenDeathScene,
         ));
 
   ConfigStateNotifier.override(IkutConfig config) : super(config);

@@ -11,11 +11,21 @@ class ConfigRepository {
 
   final ConfigStateNotifier _configStateNotifier;
 
+  static const defaultSaveWhenKillScene =
+      LocalDataSource.defaultSaveWhenKillScene;
+
+  static const defaultSaveWhenDeathScene =
+      LocalDataSource.defaultSaveWhenDeathScene;
+
+  static const defaultHost = LocalDataSource.defaultHost;
+
+  static const defaultPort = LocalDataSource.defaultPort;
+
   ConfigRepository(this._localDataSource, this._configStateNotifier);
 
   IkutConfig _config = const IkutConfig(
-      saveWhenKillScene: LocalDataSource.defaultSaveWhenKillScene,
-      saveWhenDeathScene: LocalDataSource.defaultSaveWhenDeathScene);
+      saveWhenKillScene: defaultSaveWhenKillScene,
+      saveWhenDeathScene: defaultSaveWhenDeathScene);
 
   /// アプリ起動時の設定読み込み
   Future<void> load() async {

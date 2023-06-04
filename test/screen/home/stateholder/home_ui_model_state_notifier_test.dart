@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:ikut3/data/local_data_source.dart';
+import 'package:ikut3/data/config_repository.dart';
 import 'package:ikut3/model/ikut_config.dart';
 import 'package:ikut3/model/web_socket_connection.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model.dart';
@@ -18,14 +18,14 @@ void main() {
             logs: [],
             videoStatus: HomeVideoStatus.initial,
             connection: WebSocketConnection(
-                host: LocalDataSource.defaultHost,
-                port: LocalDataSource.defaultPort,
+                host: ConfigRepository.defaultHost,
+                port: ConfigRepository.defaultPort,
                 connect: false),
             connectStatus: HomeConnectStatus.progress,
             config: IkutConfig(
-                saveWhenKillScene: LocalDataSource.defaultSaveWhenKillScene,
+                saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
                 saveWhenDeathScene:
-                    LocalDataSource.defaultSaveWhenDeathScene)));
+                    ConfigRepository.defaultSaveWhenDeathScene)));
     stateNotifier.onConnectingCamera();
     expect(
         getState(),
@@ -33,14 +33,14 @@ void main() {
             logs: [],
             videoStatus: HomeVideoStatus.connecting,
             connection: WebSocketConnection(
-                host: LocalDataSource.defaultHost,
-                port: LocalDataSource.defaultPort,
+                host: ConfigRepository.defaultHost,
+                port: ConfigRepository.defaultPort,
                 connect: false),
             connectStatus: HomeConnectStatus.progress,
             config: IkutConfig(
-                saveWhenKillScene: LocalDataSource.defaultSaveWhenKillScene,
+                saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
                 saveWhenDeathScene:
-                    LocalDataSource.defaultSaveWhenDeathScene)));
+                    ConfigRepository.defaultSaveWhenDeathScene)));
     stateNotifier.onCameraStart();
     expect(
         getState(),
@@ -48,14 +48,14 @@ void main() {
             logs: [],
             videoStatus: HomeVideoStatus.start,
             connection: WebSocketConnection(
-                host: LocalDataSource.defaultHost,
-                port: LocalDataSource.defaultPort,
+                host: ConfigRepository.defaultHost,
+                port: ConfigRepository.defaultPort,
                 connect: false),
             connectStatus: HomeConnectStatus.progress,
             config: IkutConfig(
-                saveWhenKillScene: LocalDataSource.defaultSaveWhenKillScene,
+                saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
                 saveWhenDeathScene:
-                    LocalDataSource.defaultSaveWhenDeathScene)));
+                    ConfigRepository.defaultSaveWhenDeathScene)));
     stateNotifier.onConnected();
     expect(
         getState(),
@@ -63,14 +63,14 @@ void main() {
             logs: [],
             videoStatus: HomeVideoStatus.start,
             connection: WebSocketConnection(
-                host: LocalDataSource.defaultHost,
-                port: LocalDataSource.defaultPort,
+                host: ConfigRepository.defaultHost,
+                port: ConfigRepository.defaultPort,
                 connect: false),
             connectStatus: HomeConnectStatus.success,
             config: IkutConfig(
-                saveWhenKillScene: LocalDataSource.defaultSaveWhenKillScene,
+                saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
                 saveWhenDeathScene:
-                    LocalDataSource.defaultSaveWhenDeathScene)));
+                    ConfigRepository.defaultSaveWhenDeathScene)));
     stateNotifier.resetConnectStatus();
     expect(
         getState(),
@@ -78,14 +78,14 @@ void main() {
             logs: [],
             videoStatus: HomeVideoStatus.start,
             connection: WebSocketConnection(
-                host: LocalDataSource.defaultHost,
-                port: LocalDataSource.defaultPort,
+                host: ConfigRepository.defaultHost,
+                port: ConfigRepository.defaultPort,
                 connect: false),
             connectStatus: HomeConnectStatus.progress,
             config: IkutConfig(
-                saveWhenKillScene: LocalDataSource.defaultSaveWhenKillScene,
+                saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
                 saveWhenDeathScene:
-                    LocalDataSource.defaultSaveWhenDeathScene)));
+                    ConfigRepository.defaultSaveWhenDeathScene)));
     stateNotifier.onConnectError();
     expect(
         getState(),
@@ -93,13 +93,13 @@ void main() {
             logs: [],
             videoStatus: HomeVideoStatus.start,
             connection: WebSocketConnection(
-                host: LocalDataSource.defaultHost,
-                port: LocalDataSource.defaultPort,
+                host: ConfigRepository.defaultHost,
+                port: ConfigRepository.defaultPort,
                 connect: false),
             connectStatus: HomeConnectStatus.error,
             config: IkutConfig(
-                saveWhenKillScene: LocalDataSource.defaultSaveWhenKillScene,
+                saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
                 saveWhenDeathScene:
-                    LocalDataSource.defaultSaveWhenDeathScene)));
+                    ConfigRepository.defaultSaveWhenDeathScene)));
   });
 }

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ikut3/data/config_repository.dart';
 import 'package:ikut3/data/config_state_notifier.dart';
 import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
-import 'package:ikut3/data/local_data_source.dart';
 import 'package:ikut3/data/web_socket_connection_state_notifier.dart';
 import 'package:ikut3/model/ikut_config.dart';
 import 'package:ikut3/model/ikut_log.dart';
@@ -19,8 +19,8 @@ void main() {
       IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 1))
     ];
     const connection = WebSocketConnection(
-        host: LocalDataSource.defaultHost,
-        port: LocalDataSource.defaultPort,
+        host: ConfigRepository.defaultHost,
+        port: ConfigRepository.defaultPort,
         connect: false);
 
     const config =
