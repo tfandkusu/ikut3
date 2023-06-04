@@ -49,7 +49,6 @@ class HomeOnCreateUseCase {
               break;
             case PredictLabel.death:
               if (config.saveWhenDeathScene || config.saveWhenKillScene) {
-                // デスシーンの時はリプレイバッファを保存する。
                 // 「たおした」と「やられた」が同時に表示された場合は「やられた」扱いで保存する。
                 if (config.saveWhenDeathScene) {
                   _stateNotifier.onScene(currentTime, IkutScene.death);
@@ -58,7 +57,7 @@ class HomeOnCreateUseCase {
                 _stateNotifier.onSaveReplayBuffer(currentTime);
               }
               _killScene = false;
-              // デスシーンの時は8秒後にシーン分類を再開する。
+              // やられたシーンあとは8秒後にシーン分類を再開する。
               baseDelayTime = 8000;
               break;
             case PredictLabel.other:
