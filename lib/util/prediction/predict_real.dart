@@ -47,6 +47,8 @@ class PredictImpl extends Predict {
           onResult(_count, PredictLabel.kill);
         } else if (label == "death") {
           onResult(_count, PredictLabel.death);
+        } else {
+          onResult(_count, PredictLabel.other);
         }
         ++_count;
       });
