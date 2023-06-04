@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/config_repository.dart';
 import 'package:ikut3/data/config_state_notifier.dart';
+import 'package:ikut3/data/connection_repository.dart';
 import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
-import 'package:ikut3/data/local_data_source.dart';
 import 'package:ikut3/data/web_socket_connection_state_notifier.dart';
 import 'package:ikut3/screen/home/stateholder/home_event_handler.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model_state_notifier.dart';
@@ -21,7 +21,7 @@ class MockCurrentTimeGetter extends Mock implements CurrentTimeGetter {}
 class MockHomeUiModelStateNotifier extends Mock
     implements HomeUiModelStateNotifier {}
 
-class MockLocalDataSource extends Mock implements LocalDataSource {}
+class MockConnectionRepository extends Mock implements ConnectionRepository {}
 
 class MockConfigRepository extends Mock implements ConfigRepository {}
 
@@ -35,7 +35,7 @@ void main() {
   final logListStateNotifier = MockIkutLogListStateNotifier();
   final currentTimeGetter = MockCurrentTimeGetter();
   final homeUiModelStateNotifier = MockHomeUiModelStateNotifier();
-  final localDataSource = MockLocalDataSource();
+  final connectionRepository = MockConnectionRepository();
   final configRepository = MockConfigRepository();
   final ikutConfigStateNotifier = MockConfigStateNotifier();
   final webSocketConnectionStateNotifier = WebSocketConnectionStateNotifier();
@@ -44,10 +44,10 @@ void main() {
     final now = DateTime.now();
     when(() => currentTimeGetter.get()).thenReturn(now);
     when(() => configRepository.load()).thenAnswer((_) async {});
-    when(() => localDataSource.isCameraHasStarted()).thenAnswer((_) async {
+    when(() => connectionRepository.isCameraHasStarted()).thenAnswer((_) async {
       return false;
     });
-    when(() => localDataSource.isConnected()).thenAnswer((_) async {
+    when(() => connectionRepository.isConnected()).thenAnswer((_) async {
       return false;
     });
     when(() => onCreateUseCase.execute()).thenAnswer((_) async {});
@@ -57,7 +57,7 @@ void main() {
           .overrideWith((ref) => logListStateNotifier),
       homeOnCreateUseCase.overrideWithValue(onCreateUseCase),
       configRepositoryProvider.overrideWithValue(configRepository),
-      localDataSourceProvider.overrideWithValue(localDataSource),
+      connectionRepositoryProvider.overrideWithValue(connectionRepository),
       configStateNotifierProvider
           .overrideWith((ref) => ikutConfigStateNotifier),
     ]);
@@ -66,24 +66,19 @@ void main() {
     verifyInOrder([
       () => logListStateNotifier.onAppStart(now),
       () => configRepository.load(),
-      () => localDataSource.isCameraHasStarted(),
-      () => localDataSource.isConnected(),
+      () => connectionRepository.isCameraHasStarted(),
+      () => connectionRepository.isConnected(),
       () => onCreateUseCase.execute()
     ]);
   });
   test('HomeEventHandler#onCreate カメラの許可を以前の起動時に行っている。obs-websocketに自動接続する。',
       () async {
     final now = DateTime.now();
-    when(() => localDataSource.isSaveWhenKillScene()).thenAnswer((_) async {
-      return false;
-    });
-    when(() => localDataSource.isSaveWhenDeathScene()).thenAnswer((_) async {
+    when(() => configRepository.load()).thenAnswer((_) async {});
+    when(() => connectionRepository.isCameraHasStarted()).thenAnswer((_) async {
       return true;
     });
-    when(() => localDataSource.isCameraHasStarted()).thenAnswer((_) async {
-      return true;
-    });
-    when(() => localDataSource.isConnected()).thenAnswer((_) async {
+    when(() => connectionRepository.isConnected()).thenAnswer((_) async {
       return true;
     });
     when(() => onCreateUseCase.execute()).thenAnswer((_) async {});
@@ -92,7 +87,8 @@ void main() {
       homeOnCreateUseCase.overrideWithValue(onCreateUseCase),
       homeUiModelStateNotifierProvider
           .overrideWith((ref) => homeUiModelStateNotifier),
-      localDataSourceProvider.overrideWithValue(localDataSource),
+      configRepositoryProvider.overrideWithValue(configRepository),
+      connectionRepositoryProvider.overrideWithValue(connectionRepository),
       configStateNotifierProvider
           .overrideWith((ref) => ikutConfigStateNotifier),
       ikutLogListStateNotifierProvider
@@ -105,13 +101,10 @@ void main() {
     await eventHandler.onCreate();
     verifyInOrder([
       () => logListStateNotifier.onAppStart(now),
-      () => localDataSource.isSaveWhenKillScene(),
-      () => localDataSource.isSaveWhenDeathScene(),
-      () => ikutConfigStateNotifier.setSaveWhenKillScene(false),
-      () => ikutConfigStateNotifier.setSaveWhenDeathScene(true),
-      () => localDataSource.isCameraHasStarted(),
+      () => configRepository.load(),
+      () => connectionRepository.isCameraHasStarted(),
       () => homeUiModelStateNotifier.onConnectingCamera(),
-      () => localDataSource.isConnected(),
+      () => connectionRepository.isConnected(),
       () => logListStateNotifier.onStartConnect(now),
       () => webSocketConnectionStateNotifier.setConnect(true),
       () => onCreateUseCase.execute()
@@ -119,7 +112,7 @@ void main() {
   });
   test('HomeEventHandler#onCameraStart', () async {
     final now = DateTime.now();
-    when(() => localDataSource.setCameraHasStarted(true))
+    when(() => connectionRepository.setCameraHasStarted(true))
         .thenAnswer((_) async {});
     final container = ProviderContainer(overrides: [
       ikutLogListStateNotifierProvider
@@ -127,7 +120,7 @@ void main() {
       currentTimeGetterProvider.overrideWithValue(currentTimeGetter),
       homeUiModelStateNotifierProvider
           .overrideWith((ref) => homeUiModelStateNotifier),
-      localDataSourceProvider.overrideWithValue(localDataSource)
+      connectionRepositoryProvider.overrideWithValue(connectionRepository)
     ]);
     when(() => currentTimeGetter.get()).thenReturn(now);
     final eventHandler = container.read(homeEventHandlerProvider);
@@ -136,7 +129,7 @@ void main() {
       () => homeUiModelStateNotifier.onCameraStart(),
       () => currentTimeGetter.get(),
       () => logListStateNotifier.onCameraStart(now),
-      () => localDataSource.setCameraHasStarted(true),
+      () => connectionRepository.setCameraHasStarted(true),
     ]);
   });
   test('HomeEventHandler#onClickConnectCamera', () async {
@@ -170,29 +163,31 @@ void main() {
   });
 
   test('HomeEventHandler#onConnected', () async {
-    when(() => localDataSource.setConnected(true)).thenAnswer((_) async {});
+    when(() => connectionRepository.setConnected(true))
+        .thenAnswer((_) async {});
     final container = ProviderContainer(overrides: [
       homeUiModelStateNotifierProvider
           .overrideWith((ref) => homeUiModelStateNotifier),
-      localDataSourceProvider.overrideWithValue(localDataSource)
+      connectionRepositoryProvider.overrideWithValue(connectionRepository)
     ]);
     final eventHandler = container.read(homeEventHandlerProvider);
     await eventHandler.onConnected();
     verifyInOrder([
       () => homeUiModelStateNotifier.onConnected(),
-      () => localDataSource.setConnected(true)
+      () => connectionRepository.setConnected(true)
     ]);
   });
 
   test('HomeEventHandler#onConnectError', () async {
-    when(() => localDataSource.setConnected(false)).thenAnswer((_) async {});
+    when(() => connectionRepository.setConnected(false))
+        .thenAnswer((_) async {});
     final container = ProviderContainer(overrides: [
       currentTimeGetterProvider.overrideWithValue(currentTimeGetter),
       ikutLogListStateNotifierProvider
           .overrideWith((ref) => logListStateNotifier),
       homeUiModelStateNotifierProvider
           .overrideWith((ref) => homeUiModelStateNotifier),
-      localDataSourceProvider.overrideWithValue(localDataSource)
+      connectionRepositoryProvider.overrideWithValue(connectionRepository)
     ]);
     final now = DateTime.now();
     when(() => currentTimeGetter.get()).thenReturn(now);
@@ -202,7 +197,7 @@ void main() {
       () => currentTimeGetter.get(),
       () => logListStateNotifier.onConnectError(now),
       () => homeUiModelStateNotifier.onConnectError(),
-      () => localDataSource.setConnected(false)
+      () => connectionRepository.setConnected(false)
     ]);
   });
 

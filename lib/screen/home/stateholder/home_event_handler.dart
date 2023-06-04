@@ -1,10 +1,10 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/config_repository.dart';
+import 'package:ikut3/data/connection_repository.dart';
 import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model_state_notifier.dart';
 import 'package:ikut3/util/current_time_provider.dart';
 
-import '../../../data/local_data_source.dart';
 import '../../../data/web_socket_connection_state_notifier.dart';
 import '../usecase/home_on_create_use_case.dart';
 
@@ -17,7 +17,7 @@ class HomeEventHandler {
 
   final HomeUiModelStateNotifier _stateNotifier;
 
-  final LocalDataSource _localDataSource;
+  final ConnectionRepository _connectionRepository;
 
   final ConfigRepository _configRepository;
 
@@ -28,7 +28,7 @@ class HomeEventHandler {
       this._logListStateNotifier,
       this._currentTimeGetter,
       this._stateNotifier,
-      this._localDataSource,
+      this._connectionRepository,
       this._configRepository,
       this._connectionStateNotifier);
 
@@ -37,13 +37,12 @@ class HomeEventHandler {
     _logListStateNotifier.onAppStart(_currentTimeGetter.get());
     // 設定読み込み
     await _configRepository.load();
-    // TODO こちらも Repository に移動する
     // カメラ自動接続
-    if (await _localDataSource.isCameraHasStarted()) {
+    if (await _connectionRepository.isCameraHasStarted()) {
       onClickConnectCamera();
     }
     // obs-websocket 自動接続
-    if (await _localDataSource.isConnected()) {
+    if (await _connectionRepository.isConnected()) {
       onClickConnect();
     }
     await _onCreateUseCase.execute();
@@ -52,7 +51,7 @@ class HomeEventHandler {
   Future<void> onCameraStart() async {
     _stateNotifier.onCameraStart();
     _logListStateNotifier.onCameraStart(_currentTimeGetter.get());
-    await _localDataSource.setCameraHasStarted(true);
+    await _connectionRepository.setCameraHasStarted(true);
   }
 
   void onClickConnectCamera() {
@@ -68,14 +67,14 @@ class HomeEventHandler {
   /// 接続された
   Future<void> onConnected() async {
     _stateNotifier.onConnected();
-    await _localDataSource.setConnected(true);
+    await _connectionRepository.setConnected(true);
   }
 
   /// 接続エラー
   Future<void> onConnectError() async {
     _logListStateNotifier.onConnectError(_currentTimeGetter.get());
     _stateNotifier.onConnectError();
-    await _localDataSource.setConnected(false);
+    await _connectionRepository.setConnected(false);
   }
 
   /// 接続エラーが確認された
@@ -101,7 +100,7 @@ final homeEventHandlerProvider = Provider((ref) {
       ref.read(ikutLogListStateNotifierProvider.notifier),
       ref.read(currentTimeGetterProvider),
       ref.read(homeUiModelStateNotifierProvider.notifier),
-      ref.read(localDataSourceProvider),
+      ref.read(connectionRepositoryProvider),
       ref.read(configRepositoryProvider),
       ref.read(webSocketConnectionStateNotifierProvider.notifier));
 });
