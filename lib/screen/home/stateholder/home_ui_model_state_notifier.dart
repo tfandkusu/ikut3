@@ -1,7 +1,8 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ikut3/data/config_repository.dart';
+import 'package:ikut3/model/ikut_config.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model.dart';
 
-import '../../../data/local_data_source.dart';
 import '../../../model/web_socket_connection.dart';
 
 class HomeUiModelStateNotifier extends StateNotifier<HomeUiModel> {
@@ -10,10 +11,14 @@ class HomeUiModelStateNotifier extends StateNotifier<HomeUiModel> {
             logs: [],
             videoStatus: HomeVideoStatus.initial,
             connection: WebSocketConnection(
-                host: LocalDataSource.defaultHost,
-                port: LocalDataSource.defaultPort,
+                host: ConfigRepository.defaultHost,
+                port: ConfigRepository.defaultPort,
                 connect: false),
-            connectStatus: HomeConnectStatus.progress));
+            connectStatus: HomeConnectStatus.progress,
+            config: IkutConfig(
+                saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
+                saveWhenDeathScene:
+                    ConfigRepository.defaultSaveWhenDeathScene)));
 
   /// video要素を張った
   void onConnectingCamera() {

@@ -29,7 +29,7 @@ class PredictImpl extends Predict {
 
   /// 現在の取り込みフレームを画像分類する。
   @override
-  void predict(void Function(int count, bool death) onResult) {
+  void predict(void Function(int count, PredictLabel label) onResult) {
     final videoElement = getVideoElementIfCreated();
     if (videoElement != null) {
       // フレームをcanvasに書き込む
@@ -43,13 +43,19 @@ class PredictImpl extends Predict {
         String jsonString = await promiseToFuture(classify(imageElement));
         // フレームの予測が完了
         final label = _getLabel(jsonString);
-        onResult(_count, label == "death");
+        if (label == "kill") {
+          onResult(_count, PredictLabel.kill);
+        } else if (label == "death") {
+          onResult(_count, PredictLabel.death);
+        } else {
+          onResult(_count, PredictLabel.other);
+        }
         ++_count;
       });
       imageElement.src = dataUrl;
     } else {
       // ビデオが設定されていない時は通常シーン扱い。
-      onResult(_count, false);
+      onResult(_count, PredictLabel.other);
       ++_count;
     }
   }

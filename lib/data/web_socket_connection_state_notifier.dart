@@ -1,14 +1,13 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ikut3/data/config_repository.dart';
 import 'package:ikut3/model/web_socket_connection.dart';
-
-import 'local_data_source.dart';
 
 class WebSocketConnectionStateNotifier
     extends StateNotifier<WebSocketConnection> {
   WebSocketConnectionStateNotifier()
       : super(const WebSocketConnection(
-            host: LocalDataSource.defaultHost,
-            port: LocalDataSource.defaultPort,
+            host: ConfigRepository.defaultHost,
+            port: ConfigRepository.defaultPort,
             connect: false));
 
   WebSocketConnectionStateNotifier.override(WebSocketConnection connection)

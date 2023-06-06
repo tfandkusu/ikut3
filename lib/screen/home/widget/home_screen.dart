@@ -6,13 +6,14 @@ import 'package:ikut3/screen/home/stateholder/home_event_handler.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model_provider.dart';
 import 'package:ikut3/screen/home/widget/home_video_widget.dart';
 import 'package:ikut3/screen/home/widget/video_element.dart';
+import 'package:ikut3/util/shims/dart_ui.dart' as ui;
 
 import '../../../resource/strings.dart';
 import 'about_dialog.dart';
 import 'footer_widget.dart';
 import 'home_connection_widget.dart';
 import 'home_log_widget.dart';
-import 'package:ikut3/util/shims/dart_ui.dart' as ui;
+import 'home_scene_widget.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
@@ -74,7 +75,9 @@ class HomeScreen extends HookConsumerWidget {
             const SizedBox(height: 16),
             // WebSocket接続部分
             HomeConnectionWidget(contentWidth),
-            const SizedBox(height: 16),
+            // 抽出シーン設定
+            HomeSceneWidget(contentWidth),
+            const SizedBox(height: 8),
             // ログ表示部分
             Expanded(
                 child: Container(
@@ -82,12 +85,14 @@ class HomeScreen extends HookConsumerWidget {
               decoration: BoxDecoration(
                   border: Border.all(color: themeData.colorScheme.outline)),
               child: ListView.builder(
-                  itemBuilder: (_, index) {
-                    final log = uiModel.logs[index];
-                    return HomeLogWidget(log);
-                  },
-                  itemCount: uiModel.logs.length,
-                  controller: scrollController),
+                itemBuilder: (_, index) {
+                  final log = uiModel.logs[index];
+                  return HomeLogWidget(log);
+                },
+                itemCount: uiModel.logs.length,
+                controller: scrollController,
+                padding: const EdgeInsets.only(bottom: 48),
+              ),
             )),
             const SizedBox(height: 16),
             // フッター部分
