@@ -91,7 +91,7 @@ class HomeScreen extends HookConsumerWidget {
                 },
                 itemCount: uiModel.logs.length,
                 controller: scrollController,
-                padding: const EdgeInsets.only(bottom: 32),
+                padding: const EdgeInsets.only(bottom: 48),
               ),
             )),
             const SizedBox(height: 16),
