@@ -85,12 +85,14 @@ class HomeScreen extends HookConsumerWidget {
               decoration: BoxDecoration(
                   border: Border.all(color: themeData.colorScheme.outline)),
               child: ListView.builder(
-                  itemBuilder: (_, index) {
-                    final log = uiModel.logs[index];
-                    return HomeLogWidget(log);
-                  },
-                  itemCount: uiModel.logs.length,
-                  controller: scrollController),
+                itemBuilder: (_, index) {
+                  final log = uiModel.logs[index];
+                  return HomeLogWidget(log);
+                },
+                itemCount: uiModel.logs.length,
+                controller: scrollController,
+                padding: const EdgeInsets.only(bottom: 32),
+              ),
             )),
             const SizedBox(height: 16),
             // フッター部分
