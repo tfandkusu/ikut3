@@ -48,11 +48,13 @@ class HomeOnCreateUseCase {
               _killScene = true;
               break;
             case PredictLabel.death:
-              if (config.saveWhenDeathScene || config.saveWhenKillScene) {
-                // 「たおした」と「やられた」が同時に表示された場合は「やられた」扱いで保存する。
-                if (config.saveWhenDeathScene) {
-                  _stateNotifier.onScene(currentTime, IkutScene.death);
-                }
+              // やられたシーンを保存するケース
+              if (config.saveWhenDeathScene) {
+                _stateNotifier.onScene(currentTime, IkutScene.death);
+              }
+              // 「○○をたおした」表示中の「やられた」でもリプレイバッファを保存する。
+              if ((_killScene && config.saveWhenKillScene) ||
+                  config.saveWhenDeathScene) {
                 _obsRepository.saveReplayBuffer();
                 _stateNotifier.onSaveReplayBuffer(currentTime);
               }
