@@ -67,7 +67,6 @@ class HomeOnCreateUseCase {
               if (_killScene && config.saveWhenKillScene) {
                 _obsRepository.saveReplayBuffer();
                 _stateNotifier.onSaveReplayBuffer(currentTime);
-                baseDelayTime = 3000;
               }
               _killScene = false;
               break;
