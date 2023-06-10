@@ -36,7 +36,7 @@ class HomeOnCreateUseCase {
       _predict.predict((count, label) {
         final endTime = DateTime.now().millisecondsSinceEpoch;
         // デスシーンでないときは0.5秒後にシーン分類する
-        int baseDelayTime = 500;
+        int delayTime = 500;
         if (_obsRepository.isConnected()) {
           final currentTime = _currentTimeGetter.get();
           final config = _configRepository.getConfig();
@@ -60,13 +60,15 @@ class HomeOnCreateUseCase {
               }
               _killScene = false;
               // やられたシーンあとは8秒後にシーン分類を再開する。
-              baseDelayTime = 8000;
+              delayTime = 8000;
               break;
             case PredictLabel.other:
               // 「○○をたおした」が消えたタイミングでリプレイバッファを保存する。
               if (_killScene && config.saveWhenKillScene) {
                 _obsRepository.saveReplayBuffer();
                 _stateNotifier.onSaveReplayBuffer(currentTime);
+                // 次のリプレイバッファ保存まで3秒置く
+                delayTime = 3000;
               }
               _killScene = false;
               break;
@@ -74,7 +76,7 @@ class HomeOnCreateUseCase {
         } else {
           _killScene = false;
         }
-        final delay = max(baseDelayTime - (endTime - startTime), 0).toInt();
+        final delay = max(delayTime - (endTime - startTime), 0).toInt();
         Future.delayed(Duration(milliseconds: delay), () {
           _predictTask();
         });
