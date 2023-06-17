@@ -29,24 +29,28 @@ class HomeSceneWidget extends HookConsumerWidget {
             Text(Strings.saveScene, style: keyStyle),
             const SizedBox(width: 8),
             _buildCheckBox(
-                context, Strings.sceneKill, uiModel.config.saveWhenKillScene,
-                (value) {
+                context,
+                Strings.sceneKill,
+                uiModel.config.saveWhenKillScene,
+                Strings.sceneKillTooltip, (value) {
               eventHandler.onChangeSaveWhenKillScene(value);
             }),
-            _buildCheckBox(
-                context, Strings.sceneDeath, uiModel.config.saveWhenDeathScene,
-                (value) {
+            _buildCheckBox(context, Strings.sceneDeath,
+                uiModel.config.saveWhenDeathScene, null, (value) {
               eventHandler.onChangeSaveWhenDeathScene(value);
             }),
-            TextButton(
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(sprintf(
-                    Strings.saveDelay,
-                    [uiModel.config.deathSceneSaveDelay],
+            Tooltip(
+              message: Strings.saveDelayTooltip,
+              child: TextButton(
+                  onPressed: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(sprintf(
+                      Strings.saveDelay,
+                      [uiModel.config.deathSceneSaveDelay],
+                    )),
                   )),
-                )),
+            ),
             const SizedBox(width: 16),
           ],
         ),
@@ -54,12 +58,12 @@ class HomeSceneWidget extends HookConsumerWidget {
     );
   }
 
-  Widget _buildCheckBox(
-      BuildContext context, String text, bool value, Function(bool) onChanged) {
+  Widget _buildCheckBox(BuildContext context, String text, bool value,
+      String? tooltipText, Function(bool) onChanged) {
     final themeData = Theme.of(context);
     final valueStyle = themeData.typography.englishLike.bodyMedium
         ?.copyWith(color: themeData.colorScheme.onSurfaceVariant);
-    return InkWell(
+    final inkWell = InkWell(
       onTap: () {
         onChanged(!value);
       },
@@ -81,5 +85,13 @@ class HomeSceneWidget extends HookConsumerWidget {
         ),
       ),
     );
+    if (tooltipText != null) {
+      return Tooltip(
+        message: tooltipText,
+        child: inkWell,
+      );
+    } else {
+      return inkWell;
+    }
   }
 }
