@@ -5,7 +5,6 @@ import 'package:ikut3/data/config_repository.dart';
 
 import '../../../data/ikut_log_list_state_notifier.dart';
 import '../../../data/obs_repository.dart';
-import '../../../model/ikut_scene.dart';
 import '../../../util/current_time_provider.dart';
 import '../../../util/prediction/predict.dart';
 import '../../../util/prediction/predict_provider.dart';
@@ -43,15 +42,17 @@ class HomeOnCreateUseCase {
           switch (label) {
             case PredictLabel.kill:
               if (!_killScene && config.saveWhenKillScene) {
-                _stateNotifier.onScene(currentTime, IkutScene.kill);
+                _stateNotifier.onKillScene(currentTime);
               }
               _killScene = true;
               break;
             case PredictLabel.death:
               // やられたシーンを保存するケース
               if (config.saveWhenDeathScene) {
-                _stateNotifier.onScene(currentTime, IkutScene.death);
+                _stateNotifier.onDeathScene(
+                    currentTime, config.deathSceneSaveDelay);
               }
+              // TODO たおしたシーンのリプレイバッファ保存を遅延する。
               // 「○○をたおした」表示中の「やられた」でもリプレイバッファを保存する。
               if ((_killScene && config.saveWhenKillScene) ||
                   config.saveWhenDeathScene) {

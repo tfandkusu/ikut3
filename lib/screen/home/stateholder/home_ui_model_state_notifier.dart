@@ -16,9 +16,10 @@ class HomeUiModelStateNotifier extends StateNotifier<HomeUiModel> {
                 connect: false),
             connectStatus: HomeConnectStatus.progress,
             config: IkutConfig(
-                saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
-                saveWhenDeathScene:
-                    ConfigRepository.defaultSaveWhenDeathScene)));
+              saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
+              saveWhenDeathScene: ConfigRepository.defaultSaveWhenDeathScene,
+              deathSceneSaveDelay: ConfigRepository.defaultDeathSceneSaveDelay,
+            )));
 
   /// video要素を張った
   void onConnectingCamera() {

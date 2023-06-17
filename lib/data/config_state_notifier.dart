@@ -8,6 +8,7 @@ class ConfigStateNotifier extends StateNotifier<IkutConfig> {
       : super(const IkutConfig(
           saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
           saveWhenDeathScene: ConfigRepository.defaultSaveWhenDeathScene,
+          deathSceneSaveDelay: ConfigRepository.defaultDeathSceneSaveDelay,
         ));
 
   ConfigStateNotifier.override(IkutConfig config) : super(config);
@@ -18,6 +19,10 @@ class ConfigStateNotifier extends StateNotifier<IkutConfig> {
 
   void setSaveWhenDeathScene(bool saveWhenDeathScene) {
     state = state.copyWith(saveWhenDeathScene: saveWhenDeathScene);
+  }
+
+  void setDeathSceneSaveDelay(double deathSceneSaveDelay) {
+    state = state.copyWith(deathSceneSaveDelay: deathSceneSaveDelay);
   }
 }
 

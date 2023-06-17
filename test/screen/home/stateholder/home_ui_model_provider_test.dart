@@ -23,8 +23,10 @@ void main() {
         port: ConfigRepository.defaultPort,
         connect: false);
 
-    const config =
-        IkutConfig(saveWhenKillScene: true, saveWhenDeathScene: false);
+    const config = IkutConfig(
+        saveWhenKillScene: true,
+        saveWhenDeathScene: false,
+        deathSceneSaveDelay: 0.0);
 
     final container = ProviderContainer(overrides: [
       ikutLogListStateNotifierProvider

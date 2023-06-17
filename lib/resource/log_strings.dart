@@ -7,6 +7,8 @@ class LogStrings {
 
   static String deathScene = "やられたシーン";
 
+  static String saveDeathSceneDelay = "%d秒後に保存します。";
+
   static String saveReplayBuffer = "OBSにリプレイバッファ保存を要求しました。";
 
   static String replayBufferSaved = "保存完了";
