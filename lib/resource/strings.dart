@@ -38,4 +38,6 @@ class Strings {
   static String sceneKill = "たおした";
 
   static String sceneDeath = "やられた";
+
+  static String saveDelay = "%d秒後に保存";
 }

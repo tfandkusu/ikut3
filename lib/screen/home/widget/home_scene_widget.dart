@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../../resource/strings.dart';
 import '../stateholder/home_event_handler.dart';
@@ -37,6 +38,15 @@ class HomeSceneWidget extends HookConsumerWidget {
                 (value) {
               eventHandler.onChangeSaveWhenDeathScene(value);
             }),
+            TextButton(
+                onPressed: () {},
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(sprintf(
+                    Strings.saveDelay,
+                    [uiModel.config.deathSceneSaveDelay],
+                  )),
+                )),
             const SizedBox(width: 16),
           ],
         ),
