@@ -44,4 +44,11 @@ class Strings {
   static String saveDelay = "%d秒後に保存";
 
   static String saveDelayTooltip = "「○○にやられた！」が表示されてから\n保存するまでの秒数を設定できます。";
+
+  static String saveDelayConfigTitle = "やられたシーンの保存遅延秒数";
+
+  static String saveDelayConfigMessage =
+      "「○○にやられた！」が表示されてから\n%d秒後にリプレイバッファを保存します。";
+
+  static String seconds = "%d秒";
 }

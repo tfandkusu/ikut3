@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ikut3/screen/home/widget/home_death_scene_save_delay_widget.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../../resource/strings.dart';
@@ -42,12 +43,16 @@ class HomeSceneWidget extends HookConsumerWidget {
             Tooltip(
               message: Strings.saveDelayTooltip,
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) => const HomeDeathSceneSaveDelayWidget());
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(sprintf(
                       Strings.saveDelay,
-                      [uiModel.config.deathSceneSaveDelay],
+                      [uiModel.config.deathSceneSaveDelay.toInt()],
                     )),
                   )),
             ),

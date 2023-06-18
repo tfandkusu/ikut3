@@ -24,6 +24,10 @@ class ConfigRepository {
   static const defaultDeathSceneSaveDelay =
       LocalDataSource.defaultDeathSceneSaveDelay;
 
+  static const deathSceneSaveDelayMax = 4.0;
+
+  static const deathSceneSaveDelayMin = 0.0;
+
   ConfigRepository(this._localDataSource, this._configStateNotifier);
 
   IkutConfig _config = const IkutConfig(

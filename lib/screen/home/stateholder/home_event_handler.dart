@@ -92,6 +92,11 @@ class HomeEventHandler {
   Future<void> onChangeSaveWhenDeathScene(bool value) async {
     await _configRepository.setSaveWhenDeathScene(value);
   }
+
+  /// やられたシーンの保存遅延秒数の更新
+  Future<void> onChangeDeathSceneSaveDelay(double value) async {
+    await _configRepository.setDeathSceneSaveDelay(value);
+  }
 }
 
 final homeEventHandlerProvider = Provider((ref) {
