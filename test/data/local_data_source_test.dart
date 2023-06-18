@@ -33,5 +33,7 @@ void main() {
     expect(await localDataSource.isSaveWhenKillScene(), true);
     await localDataSource.setSaveWhenDeathScene(false);
     expect(await localDataSource.isSaveWhenDeathScene(), false);
+    await localDataSource.setDeathSceneSaveDelay(4.0);
+    expect(await localDataSource.getDeathSceneSaveDelay(), 4.0);
   });
 }
