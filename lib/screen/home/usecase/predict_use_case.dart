@@ -9,7 +9,8 @@ import '../../../util/current_time_provider.dart';
 import '../../../util/prediction/predict.dart';
 import '../../../util/prediction/predict_provider.dart';
 
-class HomeOnCreateUseCase {
+/// 画像認識 UseCase
+class PredictUseCase {
   final Predict _predict;
 
   final ObsRepository _obsRepository;
@@ -23,8 +24,8 @@ class HomeOnCreateUseCase {
   /// 画像認識1回分のタスク
   Function _predictTask = () {};
 
-  HomeOnCreateUseCase(this._predict, this._obsRepository,
-      this._configRepository, this._stateNotifier, this._currentTimeGetter);
+  PredictUseCase(this._predict, this._obsRepository, this._configRepository,
+      this._stateNotifier, this._currentTimeGetter);
 
   // たおしたシーン中フラグ
   bool _killScene = false;
@@ -33,7 +34,9 @@ class HomeOnCreateUseCase {
   int _saveDelayTime = 0;
 
   Future<void> execute() async {
+    // 画像認識モデル読み込み
     await _predict.load();
+    // 画像認識を繰り返し実行する。
     _predictTask = () {
       _runPredict();
     };
@@ -44,11 +47,19 @@ class HomeOnCreateUseCase {
     final startTime = DateTime.now().millisecondsSinceEpoch;
     _predict.predict((count, label) {
       final endTime = DateTime.now().millisecondsSinceEpoch;
-      _onPredict(startTime, endTime, label);
+      final delay = _onPredictResult(startTime, endTime, label);
+      Future.delayed(Duration(milliseconds: delay), () {
+        _predictTask();
+      });
     });
   }
 
-  void _onPredict(int startTime, int endTime, PredictLabel label) {
+  /// 画像認識結果を処理する
+  /// [startTime] 画像認識開始時刻
+  /// [endTime] 画像認識終了時刻
+  /// [label] 認識結果ラベル
+  /// [return] 次の画像認識までの待機時間
+  int _onPredictResult(int startTime, int endTime, PredictLabel label) {
     // 基本は0.5秒後にシーン分類する
     int delayTime = 500;
     if (_obsRepository.isConnected()) {
@@ -107,15 +118,12 @@ class HomeOnCreateUseCase {
       _killScene = false;
       _saveDelayTime = 0;
     }
-    final delay = max(delayTime - (endTime - startTime), 0).toInt();
-    Future.delayed(Duration(milliseconds: delay), () {
-      _predictTask();
-    });
+    return max(delayTime - (endTime - startTime), 0).toInt();
   }
 }
 
 final homeOnCreateUseCase = Provider((ref) {
-  return HomeOnCreateUseCase(
+  return PredictUseCase(
       ref.read(predictProvider),
       ref.read(obsRepositoryProvider),
       ref.read(configRepositoryProvider),
