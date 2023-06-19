@@ -40,21 +40,25 @@ class HomeSceneWidget extends HookConsumerWidget {
                 uiModel.config.saveWhenDeathScene, null, (value) {
               eventHandler.onChangeSaveWhenDeathScene(value);
             }),
-            Tooltip(
-              message: Strings.saveDelayTooltip,
-              child: TextButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) => const HomeDeathSceneSaveDelayWidget());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(sprintf(
-                      Strings.saveDelay,
-                      [uiModel.config.deathSceneSaveDelay.toInt()],
+            Visibility(
+              visible: uiModel.config.saveWhenDeathScene,
+              child: Tooltip(
+                message: Strings.saveDelayTooltip,
+                child: TextButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) =>
+                              const HomeDeathSceneSaveDelayWidget());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(sprintf(
+                        Strings.saveDelay,
+                        [uiModel.config.deathSceneSaveDelay.toInt()],
+                      )),
                     )),
-                  )),
+              ),
             ),
             const SizedBox(width: 16),
           ],
