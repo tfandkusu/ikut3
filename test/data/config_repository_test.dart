@@ -26,29 +26,59 @@ void main() {
     when(() => localDataSource.isSaveWhenDeathScene()).thenAnswer((_) async {
       return false;
     });
+    when(() => localDataSource.getDeathSceneSaveDelay()).thenAnswer((_) async {
+      return 0.0;
+    });
     when(() => localDataSource.setSaveWhenKillScene(false))
         .thenAnswer((_) async {});
     when(() => localDataSource.setSaveWhenDeathScene(true))
         .thenAnswer((_) async {});
+    when(() => localDataSource.setDeathSceneSaveDelay(4.0))
+        .thenAnswer((_) async {});
     final configRepository = container.read(configRepositoryProvider);
-    expect(configRepository.getConfig(),
-        const IkutConfig(saveWhenKillScene: false, saveWhenDeathScene: true));
+    expect(
+        configRepository.getConfig(),
+        const IkutConfig(
+            saveWhenKillScene: false,
+            saveWhenDeathScene: true,
+            deathSceneSaveDelay: 0));
     await configRepository.load();
-    expect(configRepository.getConfig(),
-        const IkutConfig(saveWhenKillScene: true, saveWhenDeathScene: false));
+    expect(
+        configRepository.getConfig(),
+        const IkutConfig(
+            saveWhenKillScene: true,
+            saveWhenDeathScene: false,
+            deathSceneSaveDelay: 0));
     await configRepository.setSaveWhenKillScene(false);
-    expect(configRepository.getConfig(),
-        const IkutConfig(saveWhenKillScene: false, saveWhenDeathScene: false));
+    expect(
+        configRepository.getConfig(),
+        const IkutConfig(
+            saveWhenKillScene: false,
+            saveWhenDeathScene: false,
+            deathSceneSaveDelay: 0));
     await configRepository.setSaveWhenDeathScene(true);
-    expect(configRepository.getConfig(),
-        const IkutConfig(saveWhenKillScene: false, saveWhenDeathScene: true));
+    expect(
+        configRepository.getConfig(),
+        const IkutConfig(
+            saveWhenKillScene: false,
+            saveWhenDeathScene: true,
+            deathSceneSaveDelay: 0));
+    await configRepository.setDeathSceneSaveDelay(4);
+    expect(
+        configRepository.getConfig(),
+        const IkutConfig(
+            saveWhenKillScene: false,
+            saveWhenDeathScene: true,
+            deathSceneSaveDelay: 4.0));
     verifyInOrder([
       () => localDataSource.isSaveWhenKillScene(),
       () => localDataSource.isSaveWhenDeathScene(),
       () => configStateNotifier.setSaveWhenKillScene(false),
       () => localDataSource.setSaveWhenKillScene(false),
       () => configStateNotifier.setSaveWhenDeathScene(true),
-      () => localDataSource.setSaveWhenDeathScene(true)
+      () => localDataSource.setSaveWhenDeathScene(true),
+      () => configStateNotifier.setDeathSceneSaveDelay(4.0),
+      () => localDataSource.setDeathSceneSaveDelay(4.0),
     ]);
   });
 }

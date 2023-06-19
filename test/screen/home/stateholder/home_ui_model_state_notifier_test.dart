@@ -24,8 +24,8 @@ void main() {
             connectStatus: HomeConnectStatus.progress,
             config: IkutConfig(
                 saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
-                saveWhenDeathScene:
-                    ConfigRepository.defaultSaveWhenDeathScene)));
+                saveWhenDeathScene: ConfigRepository.defaultSaveWhenDeathScene,
+                deathSceneSaveDelay: 0.0)));
     stateNotifier.onConnectingCamera();
     expect(
         getState(),
@@ -39,8 +39,8 @@ void main() {
             connectStatus: HomeConnectStatus.progress,
             config: IkutConfig(
                 saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
-                saveWhenDeathScene:
-                    ConfigRepository.defaultSaveWhenDeathScene)));
+                saveWhenDeathScene: ConfigRepository.defaultSaveWhenDeathScene,
+                deathSceneSaveDelay: 0.0)));
     stateNotifier.onCameraStart();
     expect(
         getState(),
@@ -54,8 +54,8 @@ void main() {
             connectStatus: HomeConnectStatus.progress,
             config: IkutConfig(
                 saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
-                saveWhenDeathScene:
-                    ConfigRepository.defaultSaveWhenDeathScene)));
+                saveWhenDeathScene: ConfigRepository.defaultSaveWhenDeathScene,
+                deathSceneSaveDelay: 0.0)));
     stateNotifier.onConnected();
     expect(
         getState(),
@@ -69,8 +69,8 @@ void main() {
             connectStatus: HomeConnectStatus.success,
             config: IkutConfig(
                 saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
-                saveWhenDeathScene:
-                    ConfigRepository.defaultSaveWhenDeathScene)));
+                saveWhenDeathScene: ConfigRepository.defaultSaveWhenDeathScene,
+                deathSceneSaveDelay: 0.0)));
     stateNotifier.resetConnectStatus();
     expect(
         getState(),
@@ -84,8 +84,8 @@ void main() {
             connectStatus: HomeConnectStatus.progress,
             config: IkutConfig(
                 saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
-                saveWhenDeathScene:
-                    ConfigRepository.defaultSaveWhenDeathScene)));
+                saveWhenDeathScene: ConfigRepository.defaultSaveWhenDeathScene,
+                deathSceneSaveDelay: 0.0)));
     stateNotifier.onConnectError();
     expect(
         getState(),
@@ -99,7 +99,7 @@ void main() {
             connectStatus: HomeConnectStatus.error,
             config: IkutConfig(
                 saveWhenKillScene: ConfigRepository.defaultSaveWhenKillScene,
-                saveWhenDeathScene:
-                    ConfigRepository.defaultSaveWhenDeathScene)));
+                saveWhenDeathScene: ConfigRepository.defaultSaveWhenDeathScene,
+                deathSceneSaveDelay: 0.0)));
   });
 }

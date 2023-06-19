@@ -1,5 +1,4 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:ikut3/model/ikut_scene.dart';
 
 import '../model/ikut_log.dart';
 
@@ -28,8 +27,15 @@ class IkutLogListStateNotifier extends StateNotifier<List<IkutLog>> {
     state = [...state, IkutLog.connected(dateTime: dateTime)];
   }
 
-  void onScene(DateTime dateTime, IkutScene scene) {
-    state = [...state, IkutLog.scene(dateTime: dateTime, scene: scene)];
+  void onKillScene(DateTime dateTime) {
+    state = [...state, IkutLog.killScene(dateTime: dateTime)];
+  }
+
+  void onDeathScene(DateTime dateTime, double saveDelay) {
+    state = [
+      ...state,
+      IkutLog.deathScene(dateTime: dateTime, saveDelay: saveDelay)
+    ];
   }
 
   void onSaveReplayBuffer(DateTime dateTime) {

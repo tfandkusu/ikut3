@@ -21,21 +21,33 @@ class ConfigRepository {
 
   static const defaultPort = LocalDataSource.defaultPort;
 
+  static const defaultDeathSceneSaveDelay =
+      LocalDataSource.defaultDeathSceneSaveDelay;
+
+  static const deathSceneSaveDelayMax = 4.0;
+
+  static const deathSceneSaveDelayMin = 0.0;
+
   ConfigRepository(this._localDataSource, this._configStateNotifier);
 
   IkutConfig _config = const IkutConfig(
-      saveWhenKillScene: defaultSaveWhenKillScene,
-      saveWhenDeathScene: defaultSaveWhenDeathScene);
+    saveWhenKillScene: defaultSaveWhenKillScene,
+    saveWhenDeathScene: defaultSaveWhenDeathScene,
+    deathSceneSaveDelay: defaultDeathSceneSaveDelay,
+  );
 
   /// アプリ起動時の設定読み込み
   Future<void> load() async {
     final saveWhenKillScene = await _localDataSource.isSaveWhenKillScene();
     final saveWhenDeathScene = await _localDataSource.isSaveWhenDeathScene();
+    final deathSceneSaveDelay = await _localDataSource.getDeathSceneSaveDelay();
     _config = IkutConfig(
         saveWhenKillScene: saveWhenKillScene,
-        saveWhenDeathScene: saveWhenDeathScene);
+        saveWhenDeathScene: saveWhenDeathScene,
+        deathSceneSaveDelay: deathSceneSaveDelay);
     _configStateNotifier.setSaveWhenKillScene(saveWhenKillScene);
     _configStateNotifier.setSaveWhenDeathScene(saveWhenDeathScene);
+    _configStateNotifier.setDeathSceneSaveDelay(deathSceneSaveDelay);
   }
 
   /// 現在の設定を取得する。
@@ -54,6 +66,12 @@ class ConfigRepository {
     _configStateNotifier.setSaveWhenDeathScene(saveWhenDeathScene);
     _config = _config.copyWith(saveWhenDeathScene: saveWhenDeathScene);
     await _localDataSource.setSaveWhenDeathScene(saveWhenDeathScene);
+  }
+
+  Future<void> setDeathSceneSaveDelay(double deathSceneSaveDelay) async {
+    _configStateNotifier.setDeathSceneSaveDelay(deathSceneSaveDelay);
+    _config = _config.copyWith(deathSceneSaveDelay: deathSceneSaveDelay);
+    await _localDataSource.setDeathSceneSaveDelay(deathSceneSaveDelay);
   }
 }
 

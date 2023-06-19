@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
 import 'package:ikut3/model/ikut_log.dart';
-import 'package:ikut3/model/ikut_scene.dart';
 
 void main() {
   test("ikutLogListStateNotifierProvider setUp success", () {
@@ -70,34 +69,29 @@ void main() {
     getUiModel() => container.read(ikutLogListStateNotifierProvider);
     expect(getUiModel(), []);
 
-    stateNotifier.onScene(dateTime.copyWith(second: 0), IkutScene.kill);
-    expect(getUiModel(), [
-      IkutLog.scene(
-          dateTime: dateTime.copyWith(second: 0), scene: IkutScene.kill)
-    ]);
+    stateNotifier.onKillScene(dateTime.copyWith(second: 0));
+    expect(getUiModel(),
+        [IkutLog.killScene(dateTime: dateTime.copyWith(second: 0))]);
     stateNotifier.onSaveReplayBuffer(dateTime.copyWith(second: 1));
     expect(getUiModel(), [
-      IkutLog.scene(
-          dateTime: dateTime.copyWith(second: 0), scene: IkutScene.kill),
+      IkutLog.killScene(dateTime: dateTime.copyWith(second: 0)),
       IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 1))
     ]);
     stateNotifier.onReplayBufferSaved(dateTime.copyWith(second: 2), path);
     expect(getUiModel(), [
-      IkutLog.scene(
-          dateTime: dateTime.copyWith(second: 0), scene: IkutScene.kill),
+      IkutLog.killScene(dateTime: dateTime.copyWith(second: 0)),
       IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 1)),
       IkutLog.replayBufferSaved(
           dateTime: dateTime.copyWith(second: 2), path: path)
     ]);
-    stateNotifier.onScene(dateTime.copyWith(second: 3), IkutScene.death);
+    stateNotifier.onDeathScene(dateTime.copyWith(second: 3), 1.0);
     expect(getUiModel(), [
-      IkutLog.scene(
-          dateTime: dateTime.copyWith(second: 0), scene: IkutScene.kill),
+      IkutLog.killScene(dateTime: dateTime.copyWith(second: 0)),
       IkutLog.saveReplayBuffer(dateTime: dateTime.copyWith(second: 1)),
       IkutLog.replayBufferSaved(
           dateTime: dateTime.copyWith(second: 2), path: path),
-      IkutLog.scene(
-          dateTime: dateTime.copyWith(second: 3), scene: IkutScene.death),
+      IkutLog.deathScene(
+          dateTime: dateTime.copyWith(second: 3), saveDelay: 1.0),
     ]);
   });
   test("ikutLogListStateNotifierProvider error", () {

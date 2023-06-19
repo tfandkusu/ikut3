@@ -6,10 +6,10 @@ import 'package:ikut3/screen/home/stateholder/home_ui_model_state_notifier.dart'
 import 'package:ikut3/util/current_time_provider.dart';
 
 import '../../../data/web_socket_connection_state_notifier.dart';
-import '../usecase/home_on_create_use_case.dart';
+import '../usecase/predict_use_case.dart';
 
 class HomeEventHandler {
-  final HomeOnCreateUseCase _onCreateUseCase;
+  final PredictUseCase _predictUseCase;
 
   final IkutLogListStateNotifier _logListStateNotifier;
 
@@ -24,7 +24,7 @@ class HomeEventHandler {
   final WebSocketConnectionStateNotifier _connectionStateNotifier;
 
   HomeEventHandler(
-      this._onCreateUseCase,
+      this._predictUseCase,
       this._logListStateNotifier,
       this._currentTimeGetter,
       this._stateNotifier,
@@ -45,7 +45,7 @@ class HomeEventHandler {
     if (await _connectionRepository.isConnected()) {
       onClickConnect();
     }
-    await _onCreateUseCase.execute();
+    await _predictUseCase.execute();
   }
 
   Future<void> onCameraStart() async {
@@ -91,6 +91,11 @@ class HomeEventHandler {
   /// やられたチェック変更
   Future<void> onChangeSaveWhenDeathScene(bool value) async {
     await _configRepository.setSaveWhenDeathScene(value);
+  }
+
+  /// やられたシーンの保存遅延秒数の更新
+  Future<void> onChangeDeathSceneSaveDelay(double value) async {
+    await _configRepository.setDeathSceneSaveDelay(value);
   }
 }
 

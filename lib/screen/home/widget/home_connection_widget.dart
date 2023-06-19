@@ -81,13 +81,17 @@ class HomeConnectionWidget extends HookConsumerWidget {
                   const SizedBox(width: 8),
                   Text(uiModel.connection.port.toString(), style: valueStyle),
                   const SizedBox(width: 8),
-                  IconButton(
-                    icon:
-                        Icon(Icons.edit, color: themeData.colorScheme.primary),
-                    onPressed: () {
-                      _showDialog(context, Strings.connectionSettingTitle,
-                          Strings.connectionSettingMessage);
-                    },
+                  Tooltip(
+                    message: Strings.connectionSettingMessage,
+                    preferBelow: false,
+                    child: IconButton(
+                      icon: Icon(Icons.edit,
+                          color: themeData.colorScheme.primary),
+                      onPressed: () {
+                        _showDialog(context, Strings.connectionSettingTitle,
+                            Strings.connectionSettingMessage);
+                      },
+                    ),
                   ),
                   const SizedBox(width: 32),
                   FilledButton(

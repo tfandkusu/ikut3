@@ -7,11 +7,11 @@ import 'package:ikut3/data/ikut_log_list_state_notifier.dart';
 import 'package:ikut3/data/web_socket_connection_state_notifier.dart';
 import 'package:ikut3/screen/home/stateholder/home_event_handler.dart';
 import 'package:ikut3/screen/home/stateholder/home_ui_model_state_notifier.dart';
-import 'package:ikut3/screen/home/usecase/home_on_create_use_case.dart';
+import 'package:ikut3/screen/home/usecase/predict_use_case.dart';
 import 'package:ikut3/util/current_time_provider.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockHomeOnCreateUseCase extends Mock implements HomeOnCreateUseCase {}
+class MockPredictUseCase extends Mock implements PredictUseCase {}
 
 class MockIkutLogListStateNotifier extends Mock
     implements IkutLogListStateNotifier {}
@@ -31,7 +31,7 @@ class MockWebSocketConnectionStateNotifier extends Mock
     implements WebSocketConnectionStateNotifier {}
 
 void main() {
-  final onCreateUseCase = MockHomeOnCreateUseCase();
+  final onCreateUseCase = MockPredictUseCase();
   final logListStateNotifier = MockIkutLogListStateNotifier();
   final currentTimeGetter = MockCurrentTimeGetter();
   final homeUiModelStateNotifier = MockHomeUiModelStateNotifier();
@@ -242,5 +242,18 @@ void main() {
     final eventHandler = container.read(homeEventHandlerProvider);
     await eventHandler.onChangeSaveWhenDeathScene(true);
     verifyInOrder([() => configRepository.setSaveWhenDeathScene(true)]);
+  });
+
+  test('HomeEventHandler#onChangeDeathSceneSaveDelay', () async {
+    when(() => configRepository.setDeathSceneSaveDelay(4.0))
+        .thenAnswer((_) async {});
+    final container = ProviderContainer(overrides: [
+      configStateNotifierProvider
+          .overrideWith((ref) => ikutConfigStateNotifier),
+      configRepositoryProvider.overrideWithValue(configRepository),
+    ]);
+    final eventHandler = container.read(homeEventHandlerProvider);
+    await eventHandler.onChangeDeathSceneSaveDelay(4.0);
+    verifyInOrder([() => configRepository.setDeathSceneSaveDelay(4.0)]);
   });
 }
