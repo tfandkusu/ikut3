@@ -17,9 +17,12 @@ class HomeSceneWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeData = Theme.of(context);
     final uiModel = ref.watch(homeUiModelProvider);
+    // ignore: unused_local_variable
     final eventHandler = ref.read(homeEventHandlerProvider);
     final keyStyle = themeData.typography.dense.bodyMedium?.copyWith(
         color: themeData.colorScheme.onSurface, fontWeight: FontWeight.bold);
+    final valueStyle = themeData.typography.englishLike.bodyMedium
+        ?.copyWith(color: themeData.colorScheme.onSurfaceVariant);
     return Center(
       child: SizedBox(
         width: _contentWidth + 36,
@@ -28,18 +31,19 @@ class HomeSceneWidget extends HookConsumerWidget {
           children: [
             const SizedBox(width: 16),
             Text(Strings.saveScene, style: keyStyle),
-            const SizedBox(width: 8),
-            _buildCheckBox(
-                context,
-                Strings.sceneKill,
-                uiModel.config.saveWhenKillScene,
-                Strings.sceneKillTooltip, (value) {
-              eventHandler.onChangeSaveWhenKillScene(value);
-            }),
-            _buildCheckBox(context, Strings.sceneDeath,
-                uiModel.config.saveWhenDeathScene, null, (value) {
-              eventHandler.onChangeSaveWhenDeathScene(value);
-            }),
+            const SizedBox(width: 16),
+            // _buildCheckBox(
+            //     context,
+            //     Strings.sceneKill,
+            //     uiModel.config.saveWhenKillScene,
+            //     Strings.sceneKillTooltip, (value) {
+            //   eventHandler.onChangeSaveWhenKillScene(value);
+            // }),
+            // _buildCheckBox(context, Strings.sceneDeath,
+            //     uiModel.config.saveWhenDeathScene, null, (value) {
+            //   eventHandler.onChangeSaveWhenDeathScene(value);
+            // }),
+            Text(Strings.sceneDeath, style: valueStyle),
             Visibility(
               visible: uiModel.config.saveWhenDeathScene,
               child: Tooltip(
@@ -67,6 +71,7 @@ class HomeSceneWidget extends HookConsumerWidget {
     );
   }
 
+  // ignore: unused_element
   Widget _buildCheckBox(BuildContext context, String text, bool value,
       String? tooltipText, Function(bool) onChanged) {
     final themeData = Theme.of(context);
