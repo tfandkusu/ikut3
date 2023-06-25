@@ -14,3 +14,7 @@ https://s3.ikut.app/
 # ご意見/ご要望
 
 ご意見/ご要望がありましたら、[Issues](https://github.com/tfandkusu/ikut3/issues)に投稿するか、[Twitter](https://twitter.com/tfandkusu)でメンションかDM頂ければ、できる限り対応いたします。
+
+# メディア掲載
+
+- [「スプラトゥーン3」で敵に倒されたシーンだけを自動録画できるウェブアプリ「iKut 3」でグングン上達できる環境を作ってみたよレビュー - GIGAZINE](https://gigazine.net/news/20230503-ikut3-splatoon-3-replay/)
